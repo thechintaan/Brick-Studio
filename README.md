@@ -1,30 +1,28 @@
-# Tile Frames
+# Brick Studio
 
-Static site — no build step. The two studio apps are self-contained HTML
-(`*.dc.html`) that load a local runtime (`support.js`) and local fonts.
+A static site — no build step. Brick Studio is a self-contained HTML app
+(`Brick Studio.dc.html`) that loads a local runtime (`support.js`) and local fonts.
+Projects are saved in the browser (localStorage), so each visitor keeps their own mosaics.
 
 ## Files served
-- `index.html` — landing page linking to both studios
-- `Mosaic Studio.dc.html` — Mosaic Studio app
-- `Brick Studio.dc.html` — Brick Studio app
-- `support.js` — runtime (required by both apps)
+- `index.html` — entry point; redirects straight into the app (root URL → Brick Studio)
+- `Brick Studio.dc.html` — the app
+- `support.js` — runtime (required)
 - `fonts/` — Google Sans Flex
 
 ## Push to GitHub
+With GitHub Desktop: review the changed files → write a commit message → **Commit** → **Push**.
+
+Or from the command line:
 ```bash
-git init
 git add .
-git commit -m "Initial commit: Tile Frames"
-git branch -M main
-git remote add origin https://github.com/<you>/tile-frames.git
-git push -u origin main
+git commit -m "Update Brick Studio"
+git push
 ```
 
-## Deploy to Vercel
-1. Go to vercel.com → **Add New → Project**
-2. Import the GitHub repo
-3. Framework Preset: **Other** · Build Command: *(none)* · Output Directory: `./`
-4. **Deploy**
+## Deploy to Vercel (one-time setup)
+1. vercel.com → **Add New → Project** → import this repo
+2. Framework Preset: **Other** · Build Command: *(none)* · Output Directory: `./`
+3. **Deploy**
 
-It's a plain static site, so Vercel serves it as-is. The landing page is `index.html`.
-Or run `vercel` from the CLI in this folder.
+After that, every `git push` redeploys automatically. The root URL opens Brick Studio.

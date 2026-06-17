@@ -7,7 +7,1012 @@
 </head>
 <body>
 <x-dc>
+<helmet>
+<style>
+@font-face{font-family:'Google Sans Flex';font-weight:400;src:url('fonts/GoogleSansFlex_24pt-Regular.ttf') format('truetype');font-display:swap;}
+@font-face{font-family:'Google Sans Flex';font-weight:500;src:url('fonts/GoogleSansFlex_24pt-Medium.ttf') format('truetype');font-display:swap;}
+@font-face{font-family:'Google Sans Flex';font-weight:600;src:url('fonts/GoogleSansFlex_24pt-SemiBold.ttf') format('truetype');font-display:swap;}
+@font-face{font-family:'Google Sans Flex';font-weight:700;src:url('fonts/GoogleSansFlex_24pt-Bold.ttf') format('truetype');font-display:swap;}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;height:100%;}
+body{font-family:'Google Sans Flex',system-ui,-apple-system,sans-serif;color:#181D27;background:#F4F5F7;-webkit-font-smoothing:antialiased;overflow:hidden;}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:#D5D7DA;border-radius:8px;border:2px solid transparent;background-clip:padding-box;}
+::-webkit-scrollbar-thumb:hover{background:#A4A7AE;background-clip:padding-box;}
+</style>
+</helmet>
 
+<div style="position:fixed;inset:0;display:flex;flex-direction:column;background:#F4F5F7;">
+
+  <!-- ░░░░░░░░░░░ TOP BAR ░░░░░░░░░░░ -->
+  <div style="height:56px;flex:none;background:#fff;border-bottom:1px solid #E9EAEB;display:flex;align-items:center;padding:0 14px;gap:12px;box-shadow:0 1px 2px rgba(16,24,40,.04);z-index:30;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button onClick="{{ backToGallery }}" title="All projects" style="display:flex;align-items:center;gap:9px;height:40px;padding:0 12px 0 6px;border-radius:10px;">
+        <div style="width:30px;height:30px;border-radius:8px;background:#2D7FF9;position:relative;box-shadow:0 1px 2px rgba(16,24,40,.18);display:grid;place-items:center;">
+          <div style="width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:10px 0 0 #fff,0 10px 0 #fff,10px 10px 0 #fff;transform:translate(-5px,-5px);"></div>
+        </div>
+        <span style="font-weight:700;font-size:14px;letter-spacing:-.01em;">Brick Studio</span>
+      </button>
+      <div style="width:1px;height:20px;background:#E9EAEB;"></div>
+      <button onClick="{{ backToGallery }}" title="Back to projects" style="display:flex;align-items:center;gap:6px;height:34px;padding:0 12px 0 9px;border-radius:8px;border:1px solid #E9EAEB;background:#fff;font-size:12.5px;font-weight:600;color:#535862;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>Projects
+      </button>
+    </div>
+
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;gap:8px;">
+      <sc-if value="{{ editingTitle }}" hint-placeholder-val="{{ false }}">
+        <input value="{{ projTitle }}" onInput="{{ onTitleInput }}" onBlur="{{ commitTitle }}" onKeyDown="{{ onTitleKey }}" style="width:240px;text-align:center;font-size:13px;font-weight:600;color:#181D27;border:1px solid #2D7FF9;border-radius:7px;height:30px;padding:0 8px;outline:none;box-shadow:0 0 0 3px rgba(45,127,249,.18);">
+      </sc-if>
+      <sc-if value="{{ notEditingTitle }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ startEditTitle }}" title="Rename" style="font-size:13px;font-weight:600;color:#181D27;padding:5px 9px;border-radius:7px;">{{ projTitle }}</button>
+      </sc-if>
+      <span style="font-size:11px;color:#A4A7AE;font-weight:500;">· {{ plateLabel }}</span>
+    </div>
+
+    <div style="display:flex;align-items:center;gap:8px;">
+      <div style="display:flex;align-items:center;margin-right:2px;">
+        <div style="width:26px;height:26px;border-radius:50%;background:#FE8A77;border:2px solid #fff;box-shadow:0 0 0 1px #E9EAEB;"></div>
+        <div style="width:26px;height:26px;border-radius:50%;background:#00A4A1;border:2px solid #fff;box-shadow:0 0 0 1px #E9EAEB;margin-left:-9px;"></div>
+        <div style="width:26px;height:26px;border-radius:50%;background:#2D7FF9;border:2px solid #fff;box-shadow:0 0 0 1px #E9EAEB;margin-left:-9px;display:grid;place-items:center;color:#fff;font-size:10px;font-weight:700;">+3</div>
+      </div>
+      <button style="height:34px;padding:0 13px;border-radius:8px;border:1px solid #D5D7DA;background:#fff;font-size:13px;font-weight:600;color:#414651;display:flex;align-items:center;gap:6px;">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1 1 0 001 1h14a1 1 0 001-1v-7"/><path d="M16 6l-4-4-4 4"/><path d="M12 2v13"/></svg>
+        Share
+      </button>
+      <button onClick="{{ openExport }}" style="height:34px;padding:0 15px;border-radius:8px;background:#181D27;font-size:13px;font-weight:600;color:#fff;display:flex;align-items:center;gap:7px;box-shadow:0 1px 2px rgba(16,24,40,.2);">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <!-- ░░░░░░░░░░░ BODY ░░░░░░░░░░░ -->
+  <div style="flex:1;display:flex;min-height:0;">
+
+    <!-- ░░░ LEFT — LAYERS ░░░ -->
+    <sc-if value="{{ leftOpen }}" hint-placeholder-val="{{ true }}">
+    <div style="width:264px;flex:none;background:#fff;border-right:1px solid #E9EAEB;display:flex;flex-direction:column;z-index:20;box-shadow:1px 0 2px rgba(16,24,40,.02);">
+      <div style="height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 16px;border-bottom:1px solid #F0F0F0;">
+        <span style="font-size:13px;font-weight:600;">Layers</span>
+        <div style="display:flex;gap:2px;align-items:center;">
+          <button onClick="{{ groupSel }}" title="Group (⌘G)" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#717680;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M13 6h5a1 1 0 011 1v4M11 18H6a1 1 0 01-1-1v-4" stroke-dasharray="2 2"/></svg></button>
+          <button onClick="{{ ungroupSel }}" title="Ungroup (⌘⇧G)" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#717680;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></button>
+          <div style="width:1px;height:18px;background:#F0F0F0;margin:0 2px;"></div>
+          <button onClick="{{ collapseLeft }}" title="Collapse panel" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#717680;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/><path d="M5 4v16"/></svg></button>
+        </div>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:8px 8px 16px;">
+        <sc-for list="{{ layerRows }}" as="r" hint-placeholder-count="3">
+          <div onClick="{{ r.onSelect }}" style="{{ r.rowStyle }}">
+            <div style="width:14px;height:18px;display:grid;place-items:center;color:#D5D7DA;flex:none;cursor:grab;"><svg width="10" height="14" viewBox="0 0 10 14" fill="currentColor"><circle cx="3" cy="3" r="1.2"/><circle cx="7" cy="3" r="1.2"/><circle cx="3" cy="7" r="1.2"/><circle cx="7" cy="7" r="1.2"/><circle cx="3" cy="11" r="1.2"/><circle cx="7" cy="11" r="1.2"/></svg></div>
+            <div style="{{ r.indentStyle }}"></div>
+            <sc-if value="{{ r.hasChildren }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ r.toggleExpand }}" style="width:16px;height:16px;display:grid;place-items:center;color:#717680;flex:none;"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="{{ r.caretStyle }}"><path d="M9 6l6 6-6 6"/></svg></button>
+            </sc-if>
+            <sc-if value="{{ r.noCaret }}" hint-placeholder-val="{{ true }}"><div style="width:16px;flex:none;"></div></sc-if>
+            <sc-if value="{{ r.glyphFolder }}" hint-placeholder-val="{{ false }}"><div style="width:18px;height:18px;flex:none;display:grid;place-items:center;color:#A4A7AE;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg></div></sc-if>
+            <sc-if value="{{ r.glyphPlate }}" hint-placeholder-val="{{ false }}"><div style="width:18px;height:18px;flex:none;display:grid;place-items:center;color:#A4A7AE;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8" cy="8" r="1.3"/><circle cx="16" cy="8" r="1.3"/><circle cx="8" cy="16" r="1.3"/><circle cx="16" cy="16" r="1.3"/></svg></div></sc-if>
+            <sc-if value="{{ r.glyphChip }}" hint-placeholder-val="{{ false }}"><div style="{{ r.chipStyle }}"></div></sc-if>
+            <span style="{{ r.nameStyle }}">{{ r.name }}</span>
+            <sc-if value="{{ r.showCount }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#A4A7AE;font-weight:500;flex:none;margin-right:2px;">{{ r.count }}</span></sc-if>
+            <sc-if value="{{ r.showActions }}" hint-placeholder-val="{{ true }}">
+              <button onClick="{{ r.toggleEye }}" style="width:24px;height:24px;border-radius:6px;display:grid;place-items:center;flex:none;color:#A4A7AE;">
+                <sc-if value="{{ r.hidden }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A9 9 0 0121 12a17 17 0 01-2.2 2.9M6.5 6.6A17 17 0 003 12a9 9 0 0011.5 5.2"/></svg></sc-if>
+                <sc-if value="{{ r.visible }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg></sc-if>
+              </button>
+              <button onClick="{{ r.toggleLock }}" style="width:24px;height:24px;border-radius:6px;display:grid;place-items:center;flex:none;color:#A4A7AE;">
+                <sc-if value="{{ r.locked }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></sc-if>
+                <sc-if value="{{ r.unlocked }}" hint-placeholder-val="{{ true }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 017.5-2"/></svg></sc-if>
+              </button>
+            </sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ leftClosed }}" hint-placeholder-val="{{ false }}">
+      <div style="width:46px;flex:none;background:#fff;border-right:1px solid #E9EAEB;display:flex;flex-direction:column;align-items:center;padding-top:8px;z-index:20;">
+        <button onClick="{{ expandLeft }}" title="Show layers" style="width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:#535862;border:1px solid #E9EAEB;background:#fff;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      </div>
+    </sc-if>
+
+    <!-- ░░░ CENTER — CANVAS ░░░ -->
+    <div style="flex:1;position:relative;min-width:0;display:flex;">
+      <div ref="{{ canvasRef }}" data-canvas="1" style="flex:1;position:relative;overflow:auto;min-width:0;background:#F4F5F7;background-image:radial-gradient(circle, #E4E6EA 1px, transparent 1px);background-size:22px 22px;">
+        <div onMouseDown="{{ onCanvasBgDown }}" style="min-width:100%;min-height:100%;display:flex;align-items:center;justify-content:center;padding:64px;">
+          <div ref="{{ plateRef }}" data-plate="1" onMouseDown="{{ onPlateDown }}" onContextMenu="{{ onPlateCtx }}" style="{{ plateStyle }}">
+
+            <div style="{{ tilesLayerStyle }}">
+              <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="0">
+                <div key="{{ t.id }}" style="{{ t.style }}"></div>
+              </sc-for>
+            </div>
+
+            <!-- empty hint -->
+            <sc-if value="{{ showEmpty }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ emptyHintStyle }}">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a5 5 0 015-5h11v11a5 5 0 01-5 5H4V9z"/><path d="M4 9h6V4"/></svg>
+                <span>Pick <b style="font-weight:700;color:#717680;">Place</b> below and click a stud to lay your first tile. Drag with <b style="font-weight:700;color:#717680;">Move</b> to box-select many.</span>
+              </div>
+            </sc-if>
+
+            <!-- marquee -->
+            <sc-if value="{{ showMarquee }}" hint-placeholder-val="{{ false }}"><div style="{{ marqueeStyle }}"></div></sc-if>
+
+            <!-- selection outlines / box / handles -->
+            <sc-if value="{{ showSel }}" hint-placeholder-val="{{ false }}">
+              <sc-for list="{{ selOutlines }}" as="o" hint-placeholder-count="0"><div style="{{ o.style }}"></div></sc-for>
+              <sc-if value="{{ showBox }}" hint-placeholder-val="{{ false }}"><div style="{{ selBoxStyle }}"></div></sc-if>
+              <sc-if value="{{ showHandles }}" hint-placeholder-val="{{ false }}">
+                <div style="{{ handleNW }}"></div><div style="{{ handleNE }}"></div><div style="{{ handleSW }}"></div><div style="{{ handleSE }}"></div>
+                <div style="{{ rotStemStyle }}"></div>
+                <div onMouseDown="{{ onRotateDown }}" title="Drag to rotate · click for 90°" style="{{ rotHandleStyle }}"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v5h-5"/></svg></div>
+              </sc-if>
+            </sc-if>
+
+            <!-- floating contextual toolbar -->
+            <sc-if value="{{ showSel }}" hint-placeholder-val="{{ false }}">
+              <div onMouseDown="{{ stop }}" style="{{ toolbarStyle }}">
+                <button onClick="{{ toggleColorPop }}" title="Color" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;"><div style="{{ tbColorDot }}"></div></button>
+                <sc-if value="{{ showSingle }}" hint-placeholder-val="{{ false }}">
+                  <div style="width:1px;height:18px;background:rgba(255,255,255,.15);"></div>
+                  <button onClick="{{ toggleSwap }}" title="Swap shape" style="height:30px;padding:0 8px;border-radius:7px;display:flex;align-items:center;gap:6px;color:#fff;font-size:12px;font-weight:600;">
+                    <div style="{{ tbPartGlyph }}"></div>{{ selPartShort }}
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+                  </button>
+                </sc-if>
+                <div style="width:1px;height:18px;background:rgba(255,255,255,.15);"></div>
+                <button onClick="{{ rotateSel }}" title="Rotate 90°" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v5h-5"/></svg></button>
+                <button onClick="{{ dupSel }}" title="Duplicate" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg></button>
+                <sc-if value="{{ showMultiSel }}" hint-placeholder-val="{{ false }}">
+                  <button onClick="{{ groupSel }}" title="Group selection (⌘G)" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M13 6h5a1 1 0 011 1v4M11 18H6a1 1 0 01-1-1v-4" stroke-dasharray="2 2"/></svg></button>
+                </sc-if>
+                <button onClick="{{ delSel }}" title="Delete" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#FF9E94;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M6 7l1 13a1 1 0 001 1h8a1 1 0 001-1l1-13"/></svg></button>
+
+                <sc-if value="{{ colorPopOpen }}" hint-placeholder-val="{{ false }}">
+                  <div onMouseDown="{{ stop }}" style="position:absolute;top:40px;left:0;background:#23262C;border-radius:12px;padding:9px;box-shadow:0 12px 30px rgba(0,0,0,.32);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
+                    <sc-for list="{{ swatchSel }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+                  </div>
+                </sc-if>
+                <sc-if value="{{ swapOpen }}" hint-placeholder-val="{{ false }}">
+                  <div onMouseDown="{{ stop }}" style="position:absolute;top:40px;left:36px;background:#23262C;border-radius:12px;padding:6px;box-shadow:0 12px 30px rgba(0,0,0,.32);min-width:200px;">
+                    <sc-for list="{{ swapList }}" as="p" hint-placeholder-count="5">
+                      <button onClick="{{ p.onPick }}" style="{{ p.rowStyle }}">
+                        <div style="width:16px;display:grid;place-items:center;color:#7FB2FF;flex:none;"><sc-if value="{{ p.current }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></sc-if></div>
+                        <div style="{{ p.glyphStyle }}"></div>
+                        <span style="flex:1;text-align:left;font-size:12.5px;color:#E9EAEB;font-weight:500;">{{ p.label }}</span>
+                        <span style="width:18px;height:18px;border-radius:5px;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:10px;color:#A4A7AE;font-weight:700;">{{ p.key }}</span>
+                      </button>
+                    </sc-for>
+                  </div>
+                </sc-if>
+              </div>
+            </sc-if>
+
+            <!-- right-click context menu -->
+            <sc-if value="{{ ctxOpen }}" hint-placeholder-val="{{ false }}">
+              <div onMouseDown="{{ stop }}" onContextMenu="{{ stop }}" style="{{ ctxStyle }}">
+                <sc-for list="{{ ctxItems }}" as="m" hint-placeholder-count="9">
+                  <sc-if value="{{ m.divider }}" hint-placeholder-val="{{ false }}"><div style="height:1px;background:#F0F0F0;margin:4px 6px;"></div></sc-if>
+                  <sc-if value="{{ m.isItem }}" hint-placeholder-val="{{ true }}">
+                    <button onClick="{{ m.onClick }}" style="{{ m.rowStyle }}">
+                      <span style="flex:1;text-align:left;">{{ m.label }}</span>
+                      <span style="font-size:11px;color:#A4A7AE;font-weight:500;">{{ m.hint }}</span>
+                    </button>
+                  </sc-if>
+                </sc-for>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+
+      <!-- floating bottom tool bar -->
+      <div style="position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #E9EAEB;border-radius:14px;padding:6px;box-shadow:0 10px 30px rgba(16,24,40,.18);z-index:55;">
+        <div style="display:flex;align-items:center;gap:3px;">
+          <button onClick="{{ pickSelect }}" title="Move (V)" style="{{ btnSelect }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3l5.5 16.5 2.3-6.6 6.6-2.3L5 3z"/></svg></button>
+          <button onClick="{{ pickPlace }}" title="Place (P)" style="{{ btnPlace }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a5 5 0 015-5h11v11a5 5 0 01-5 5H4V9z"/><path d="M4 9h6V4"/></svg></button>
+          <button onClick="{{ pickEraser }}" title="Eraser (E)" style="{{ btnEraser }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5L11 8.5l6 6-3.5 3.5H7.5z"/><path d="M11 8.5l4-4 6 6-4 4"/><path d="M8 21h12"/></svg></button>
+        </div>
+        <div style="width:1px;height:24px;background:#E9EAEB;"></div>
+        <div onClick="{{ toggleBarColor }}" title="Tile color" style="width:34px;height:34px;border-radius:9px;display:grid;place-items:center;position:relative;border:1px solid #E9EAEB;cursor:pointer;">
+          <div style="{{ barColorDot }}"></div>
+          <sc-if value="{{ barColorOpen }}" hint-placeholder-val="{{ false }}">
+            <div onMouseDown="{{ stop }}" style="position:absolute;bottom:44px;left:50%;transform:translateX(-50%);background:#23262C;border-radius:12px;padding:9px;box-shadow:0 12px 30px rgba(0,0,0,.34);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;width:max-content;">
+              <sc-for list="{{ barSwatches }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+            </div>
+          </sc-if>
+        </div>
+        <div onClick="{{ toggleBarPart }}" title="Tile shape" style="height:34px;padding:0 10px 0 9px;border-radius:9px;display:flex;align-items:center;gap:7px;position:relative;border:1px solid #E9EAEB;color:#414651;font-size:12.5px;font-weight:600;cursor:pointer;">
+          <div style="{{ barPartGlyph }}"></div>{{ barPartLabel }}
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#A4A7AE" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg>
+          <sc-if value="{{ barPartOpen }}" hint-placeholder-val="{{ false }}">
+            <div onMouseDown="{{ stop }}" style="position:absolute;bottom:44px;left:50%;transform:translateX(-50%);background:#23262C;border-radius:12px;padding:6px;box-shadow:0 12px 30px rgba(0,0,0,.34);min-width:188px;">
+              <sc-for list="{{ barParts }}" as="p" hint-placeholder-count="5">
+                <button onClick="{{ p.onPick }}" style="{{ p.rowStyle }}">
+                  <div style="width:16px;display:grid;place-items:center;color:#7FB2FF;flex:none;"><sc-if value="{{ p.current }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></sc-if></div>
+                  <div style="{{ p.glyphStyle }}"></div>
+                  <span style="flex:1;text-align:left;font-size:12.5px;color:#E9EAEB;font-weight:500;">{{ p.label }}</span>
+                  <span style="width:18px;height:18px;border-radius:5px;background:rgba(255,255,255,.08);display:grid;place-items:center;font-size:10px;color:#A4A7AE;font-weight:700;">{{ p.key }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+
+      <!-- zoom pill -->
+      <div style="position:absolute;right:18px;bottom:18px;display:flex;align-items:center;background:#fff;border:1px solid #E9EAEB;border-radius:12px;overflow:hidden;box-shadow:0 6px 20px rgba(16,24,40,.12);z-index:55;">
+        <button onClick="{{ zoomOut }}" style="width:30px;height:34px;display:grid;place-items:center;color:#535862;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14"/></svg></button>
+        <span style="min-width:48px;text-align:center;font-size:12px;font-weight:600;color:#414651;">{{ zoomPct }}</span>
+        <button onClick="{{ zoomIn }}" style="width:30px;height:34px;display:grid;place-items:center;color:#535862;border-left:1px solid #F0F0F0;border-right:1px solid #F0F0F0;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button>
+        <button onClick="{{ zoomFit }}" title="Zoom to fit" style="width:32px;height:34px;display:grid;place-items:center;color:#535862;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 011-1h4M20 9V5a1 1 0 00-1-1h-4M4 15v4a1 1 0 001 1h4M20 15v4a1 1 0 01-1 1h-4"/></svg></button>
+      </div>
+    </div>
+
+    <!-- ░░░ RIGHT — PROPERTIES ░░░ -->
+    <sc-if value="{{ rightOpen }}" hint-placeholder-val="{{ true }}">
+    <div style="width:300px;flex:none;background:#fff;border-left:1px solid #E9EAEB;display:flex;flex-direction:column;z-index:20;box-shadow:-1px 0 2px rgba(16,24,40,.02);">
+      <div style="height:46px;flex:none;display:flex;align-items:center;gap:8px;padding:0 8px 0 16px;border-bottom:1px solid #F0F0F0;">
+        <div style="{{ propIconStyle }}"></div>
+        <span style="font-size:13px;font-weight:600;">{{ propTitle }}</span>
+        <span style="margin-left:auto;font-size:11px;color:#A4A7AE;font-weight:500;">{{ propSub }}</span>
+        <button onClick="{{ collapseRight }}" title="Collapse panel" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#717680;flex:none;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/><path d="M19 4v16"/></svg></button>
+      </div>
+      <div style="flex:1;overflow-y:auto;padding:16px;">
+
+        <!-- TILE -->
+        <sc-if value="{{ isTileSel }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">SHAPE</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:18px;">
+            <sc-for list="{{ partChips }}" as="p" hint-placeholder-count="5"><button onClick="{{ p.onPick }}" style="{{ p.chipStyle }}"><div style="{{ p.glyphStyle }}"></div><span style="font-size:11.5px;font-weight:600;">{{ p.label }}</span></button></sc-for>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">COLOR</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px;">
+            <sc-for list="{{ colorChips }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">ROTATION</div>
+          <div style="display:flex;background:#F5F5F5;border-radius:9px;padding:3px;gap:2px;margin-bottom:8px;">
+            <sc-for list="{{ rotChips }}" as="r" hint-placeholder-count="4"><button onClick="{{ r.onPick }}" style="{{ r.style }}">{{ r.label }}</button></sc-for>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:18px;">
+            <button onClick="{{ flipH }}" style="flex:1;height:32px;border-radius:8px;border:1px solid #E9EAEB;background:#fff;font-size:12px;font-weight:600;color:#414651;display:flex;align-items:center;justify-content:center;gap:6px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M8 7l-4 5 4 5M16 7l4 5-4 5"/></svg>Flip H</button>
+            <button onClick="{{ flipV }}" style="flex:1;height:32px;border-radius:8px;border:1px solid #E9EAEB;background:#fff;font-size:12px;font-weight:600;color:#414651;display:flex;align-items:center;justify-content:center;gap:6px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18"/><path d="M7 8l5-4 5 4M7 16l5 4 5-4"/></svg>Flip V</button>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">POSITION (STUD)</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px;">
+            <div style="display:flex;align-items:center;border:1px solid #E9EAEB;border-radius:8px;overflow:hidden;height:34px;"><span style="width:26px;text-align:center;font-size:11px;color:#A4A7AE;font-weight:700;">X</span><span style="flex:1;text-align:center;font-size:13px;font-weight:600;">{{ selX }}</span><div style="display:flex;flex-direction:column;border-left:1px solid #F0F0F0;"><button onClick="{{ incX }}" style="width:24px;height:17px;display:grid;place-items:center;color:#717680;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button><button onClick="{{ decX }}" style="width:24px;height:17px;display:grid;place-items:center;color:#717680;border-top:1px solid #F0F0F0;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button></div></div>
+            <div style="display:flex;align-items:center;border:1px solid #E9EAEB;border-radius:8px;overflow:hidden;height:34px;"><span style="width:26px;text-align:center;font-size:11px;color:#A4A7AE;font-weight:700;">Y</span><span style="flex:1;text-align:center;font-size:13px;font-weight:600;">{{ selY }}</span><div style="display:flex;flex-direction:column;border-left:1px solid #F0F0F0;"><button onClick="{{ incY }}" style="width:24px;height:17px;display:grid;place-items:center;color:#717680;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button><button onClick="{{ decY }}" style="width:24px;height:17px;display:grid;place-items:center;color:#717680;border-top:1px solid #F0F0F0;"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></button></div></div>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">LAYER</div>
+          <div style="display:flex;flex-direction:column;gap:5px;">
+            <sc-for list="{{ layerPick }}" as="g" hint-placeholder-count="2"><button onClick="{{ g.onPick }}" style="{{ g.style }}"><div style="{{ g.chip }}"></div><span style="flex:1;text-align:left;">{{ g.name }}</span><sc-if value="{{ g.current }}" hint-placeholder-val="{{ false }}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2D7FF9" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 13l4 4L19 7"/></svg></sc-if></button></sc-for>
+          </div>
+        </sc-if>
+
+        <!-- MULTI -->
+        <sc-if value="{{ isMultiSel }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:12px;color:#717680;margin-bottom:16px;"><b style="color:#181D27;font-weight:700;">{{ multiCount }}</b> tiles selected · {{ multiColors }} colors</div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">SET SHAPE FOR ALL</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:18px;">
+            <sc-for list="{{ partChips }}" as="p" hint-placeholder-count="5"><button onClick="{{ p.onPick }}" style="{{ p.chipStyle }}"><div style="{{ p.glyphStyle }}"></div><span style="font-size:11.5px;font-weight:600;">{{ p.label }}</span></button></sc-for>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">SET COLOR FOR ALL</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px;">
+            <sc-for list="{{ colorChips }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">ROTATION</div>
+          <div style="display:flex;background:#F5F5F5;border-radius:9px;padding:3px;gap:2px;margin-bottom:18px;">
+            <sc-for list="{{ rotChips }}" as="r" hint-placeholder-count="4"><button onClick="{{ r.onPick }}" style="{{ r.style }}">{{ r.label }}</button></sc-for>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <button onClick="{{ groupSel }}" style="height:38px;border-radius:9px;background:#2D7FF9;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/><path d="M13 6h5a1 1 0 011 1v4M11 18H6a1 1 0 01-1-1v-4" stroke-dasharray="2 2"/></svg>Group {{ multiCount }} tiles</button>
+            <button onClick="{{ dupSel }}" style="height:38px;border-radius:9px;border:1px solid #E9EAEB;background:#fff;color:#414651;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg>Duplicate</button>
+            <button onClick="{{ delSel }}" style="height:38px;border-radius:9px;border:1px solid #FEE4E2;background:#fff;color:#D92D20;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M6 7l1 13a1 1 0 001 1h8a1 1 0 001-1l1-13"/></svg>Delete {{ multiCount }} tiles</button>
+          </div>
+        </sc-if>
+
+        <!-- GROUP -->
+        <sc-if value="{{ isGroupSel }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">GROUP NAME</div>
+          <div style="height:36px;border:1px solid #E9EAEB;border-radius:8px;display:flex;align-items:center;padding:0 12px;font-size:13px;font-weight:600;margin-bottom:8px;">{{ groupName }}</div>
+          <div style="font-size:12px;color:#717680;margin-bottom:18px;">{{ groupCount }} tiles · {{ groupColors }} colors</div>
+          <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;">
+            <button onClick="{{ rotateGroup }}" style="height:38px;border-radius:9px;border:1px solid #E9EAEB;background:#fff;font-size:13px;font-weight:600;color:#414651;display:flex;align-items:center;gap:9px;padding:0 12px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#535862" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v5h-5"/></svg>Rotate group 90°</button>
+            <button onClick="{{ ungroupSel }}" style="height:38px;border-radius:9px;border:1px solid #E9EAEB;background:#fff;font-size:13px;font-weight:600;color:#414651;display:flex;align-items:center;gap:9px;padding:0 12px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#535862" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Ungroup</button>
+          </div>
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">REPLACE COLOR ACROSS GROUP</div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+            <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px;flex:1;"><sc-for list="{{ replFromChips }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" style="{{ c.style }}"></button></sc-for></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A4A7AE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M13 6l6 6-6 6"/></svg><div style="display:grid;grid-template-columns:repeat(5,1fr);gap:5px;flex:1;"><sc-for list="{{ replToChips }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" style="{{ c.style }}"></button></sc-for></div></div>
+          <button onClick="{{ applyReplace }}" style="width:100%;height:36px;border-radius:8px;background:#2D7FF9;color:#fff;font-size:13px;font-weight:600;">Apply replacement</button>
+        </sc-if>
+
+        <!-- DOCUMENT / BASEPLATE -->
+        <sc-if value="{{ isDocSel }}" hint-placeholder-val="{{ true }}">
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">PLATE SIZE</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:6px;">
+            <sc-for list="{{ sizePresets }}" as="p" hint-placeholder-count="5"><button onClick="{{ p.onPick }}" style="{{ p.style }}">{{ p.label }}</button></sc-for>
+          </div>
+          <div style="display:flex;gap:6px;margin-bottom:18px;">
+            <div style="flex:1;display:flex;align-items:center;border:1px solid #D5D7DA;border-radius:8px;height:34px;padding:0 4px 0 10px;">
+              <input type="number" min="4" max="64" placeholder="Custom size" onInput="{{ onCustomSize }}" onKeyDown="{{ onCustomSizeKey }}" style="border:none;outline:none;width:100%;min-width:0;font-family:inherit;font-size:13px;font-weight:600;color:#181D27;background:transparent;">
+              <span style="font-size:11px;color:#A4A7AE;font-weight:600;flex:none;padding-right:4px;">studs²</span>
+            </div>
+            <button onClick="{{ applyCustomSize }}" style="height:34px;padding:0 14px;border-radius:8px;border:1px solid #D5D7DA;background:#fff;font-size:12.5px;font-weight:600;color:#414651;flex:none;">Apply</button>
+          </div>
+
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">PLATE COLOR</div>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:8px;">
+            <sc-for list="{{ plateChips }}" as="c" hint-placeholder-count="9">
+              <div style="position:relative;">
+                <button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button>
+                <sc-if value="{{ c.custom }}" hint-placeholder-val="{{ false }}"><button onClick="{{ c.onRemove }}" title="Remove color" style="position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;background:#181D27;color:#fff;display:grid;place-items:center;font-size:11px;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,.35);">×</button></sc-if>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;margin-bottom:18px;">
+            <label style="{{ pickerSwatchStyle }}">
+              <input type="color" value="{{ pickerValue }}" onFocus="{{ onPlateHexFocus }}" onInput="{{ onPlateHexInput }}" onChange="{{ onPlateHexChange }}" style="position:absolute;inset:-4px;width:calc(100% + 8px);height:calc(100% + 8px);border:none;padding:0;margin:0;cursor:pointer;opacity:0;">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="filter:drop-shadow(0 1px 1px rgba(0,0,0,.4));pointer-events:none;"><path d="M12 5v14M5 12h14"/></svg>
+            </label>
+            <button onClick="{{ saveCustomColor }}" style="flex:1;height:34px;border-radius:8px;border:1px solid #D5D7DA;background:#fff;font-size:12.5px;font-weight:600;color:#414651;display:flex;align-items:center;justify-content:center;gap:7px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Save current color</button>
+          </div>
+
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">SAVED DESIGNS</div>
+          <div style="display:flex;gap:6px;margin-bottom:10px;">
+            <input value="{{ newTemplateName }}" onInput="{{ onTemplateName }}" placeholder="Design name" style="flex:1;min-width:0;border:1px solid #D5D7DA;border-radius:8px;height:34px;padding:0 10px;font-family:inherit;font-size:13px;font-weight:500;color:#181D27;outline:none;">
+            <button onClick="{{ saveTemplate }}" style="height:34px;padding:0 14px;border-radius:8px;background:#2D7FF9;color:#fff;font-size:12.5px;font-weight:600;flex:none;display:flex;align-items:center;gap:6px;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Save</button>
+          </div>
+          <sc-if value="{{ hasTemplates }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:18px;">
+              <sc-for list="{{ templateRows }}" as="t" hint-placeholder-count="0">
+                <div style="display:flex;align-items:center;gap:10px;border:1px solid #E9EAEB;border-radius:9px;padding:7px 8px 7px 10px;">
+                  <div style="{{ t.swatch }}"></div>
+                  <button onClick="{{ t.onApply }}" title="Apply template" style="flex:1;min-width:0;text-align:left;background:none;border:none;cursor:pointer;padding:0;">
+                    <div style="font-size:12.5px;font-weight:600;color:#181D27;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ t.name }}</div>
+                    <div style="font-size:11px;color:#A4A7AE;font-weight:500;">{{ t.meta }}</div>
+                  </button>
+                  <button onClick="{{ t.onDelete }}" title="Delete template" style="width:28px;height:28px;border-radius:7px;display:grid;place-items:center;color:#A4A7AE;flex:none;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M6 7l1 13a1 1 0 001 1h8a1 1 0 001-1l1-13"/></svg></button>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noTemplates }}" hint-placeholder-val="{{ true }}">
+            <div style="margin-bottom:18px;padding:12px;border:1px dashed #E9EAEB;border-radius:9px;font-size:12px;color:#A4A7AE;text-align:center;line-height:1.5;text-wrap:pretty;">No saved designs yet. Name your current mosaic and hit Save to keep a copy you can reopen anytime.</div>
+          </sc-if>
+
+          <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:4px;">DISPLAY</div>
+          <div style="display:flex;flex-direction:column;gap:2px;">
+            <button onClick="{{ toggleStuds }}" style="height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font-size:13px;font-weight:500;color:#414651;"><span>Show studs</span><div style="{{ studsToggle }}"><div style="{{ studsKnob }}"></div></div></button>
+            <button onClick="{{ toggleGrid }}" style="height:40px;display:flex;align-items:center;justify-content:space-between;padding:0 4px;font-size:13px;font-weight:500;color:#414651;"><span>Show stud grid</span><div style="{{ gridToggle }}"><div style="{{ gridKnob }}"></div></div></button>
+          </div>
+        </sc-if>
+      </div>
+    </div>
+    </sc-if>
+    <sc-if value="{{ rightClosed }}" hint-placeholder-val="{{ false }}">
+      <div style="width:46px;flex:none;background:#fff;border-left:1px solid #E9EAEB;display:flex;flex-direction:column;align-items:center;padding-top:8px;z-index:20;">
+        <button onClick="{{ expandRight }}" title="Show properties" style="width:32px;height:32px;border-radius:8px;display:grid;place-items:center;color:#535862;border:1px solid #E9EAEB;background:#fff;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h10M4 12h16M4 17h7"/><circle cx="18" cy="7" r="2"/><circle cx="14" cy="17" r="2"/></svg></button>
+      </div>
+    </sc-if>
+  </div>
+
+  <!-- ░░░░░░░░░░░ EXPORT SHEET ░░░░░░░░░░░ -->
+  <sc-if value="{{ exportOpen }}" hint-placeholder-val="{{ false }}">
+    <div onMouseDown="{{ closeExport }}" style="position:fixed;inset:0;background:rgba(10,13,18,.55);backdrop-filter:blur(3px);z-index:100;display:grid;place-items:center;padding:40px;">
+      <div onMouseDown="{{ stop }}" style="width:760px;max-width:100%;height:560px;max-height:100%;background:#fff;border-radius:16px;box-shadow:0 24px 70px rgba(0,0,0,.4);display:flex;overflow:hidden;">
+        <div style="width:212px;flex:none;background:#FAFAFA;border-right:1px solid #F0F0F0;padding:20px 12px;display:flex;flex-direction:column;">
+          <div style="font-size:16px;font-weight:700;padding:0 8px 4px;">Export</div>
+          <div style="font-size:12px;color:#A4A7AE;padding:0 8px 18px;">{{ projTitle }} · {{ plateLabel }}</div>
+          <sc-for list="{{ exportTabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.onPick }}" style="{{ t.style }}"><div style="color:{{ t.color }};display:grid;place-items:center;" innerHTML="{{ t.icon }}"></div><span style="flex:1;text-align:left;">{{ t.label }}</span></button></sc-for>
+          <div style="margin-top:auto;padding:8px;font-size:11px;color:#A4A7AE;line-height:1.5;">{{ totalTiles }} tiles · {{ bomCount }} unique parts</div>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;min-width:0;">
+          <div style="flex:1;overflow-y:auto;padding:26px 28px;">
+
+            <sc-if value="{{ tabPng }}" hint-placeholder-val="{{ true }}">
+              <div style="font-size:17px;font-weight:700;margin-bottom:4px;">PNG render</div>
+              <div style="font-size:13px;color:#717680;margin-bottom:18px;">A flat top-down render of your mosaic, ready to share or print.</div>
+              <div style="background:#F4F5F7;border:1px solid #E9EAEB;border-radius:12px;padding:24px;display:grid;place-items:center;margin-bottom:18px;"><div style="{{ exportPreviewStyle }}"></div></div>
+              <div style="display:flex;gap:8px;align-items:center;"><button onClick="{{ doExportPNG }}" style="height:40px;padding:0 18px;border-radius:9px;background:#181D27;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download PNG</button><span style="font-size:12px;color:#A4A7AE;">{{ exportRes }} · transparent background available</span></div>
+            </sc-if>
+
+            <sc-if value="{{ tabBom }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;"><div style="font-size:17px;font-weight:700;">Parts list (BOM)</div><div style="font-size:13px;color:#717680;">{{ totalTiles }} pieces total</div></div>
+              <div style="font-size:13px;color:#717680;margin-bottom:16px;">Real LEGO® part numbers, colors and counts.</div>
+              <sc-if value="{{ hasBom }}" hint-placeholder-val="{{ false }}">
+                <div style="border:1px solid #E9EAEB;border-radius:12px;overflow:hidden;">
+                  <div style="display:grid;grid-template-columns:1fr 92px 56px;background:#FAFAFA;border-bottom:1px solid #E9EAEB;padding:9px 14px;font-size:11px;font-weight:700;color:#717680;letter-spacing:.03em;"><span>PART · COLOR</span><span>PART No.</span><span style="text-align:right;">QTY</span></div>
+                  <sc-for list="{{ bomRows }}" as="b" hint-placeholder-count="4"><div style="{{ b.rowStyle }}"><div style="display:flex;align-items:center;gap:10px;min-width:0;"><div style="{{ b.swatch }}"></div><div style="min-width:0;"><div style="font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ b.partName }}</div><div style="font-size:11px;color:#A4A7AE;">{{ b.colorName }}</div></div></div><span style="font-size:12px;color:#535862;font-family:monospace;align-self:center;">{{ b.num }}</span><span style="font-size:13px;font-weight:700;text-align:right;align-self:center;">×{{ b.count }}</span></div></sc-for>
+                </div>
+                <button onClick="{{ doExportCSV }}" style="margin-top:16px;height:40px;padding:0 18px;border-radius:9px;border:1px solid #D5D7DA;background:#fff;color:#414651;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/></svg>Download CSV</button>
+              </sc-if>
+              <sc-if value="{{ noBom }}" hint-placeholder-val="{{ true }}"><div style="border:1px dashed #E9EAEB;border-radius:12px;padding:40px;text-align:center;font-size:13px;color:#A4A7AE;">No tiles placed yet. Build your mosaic to generate a parts list.</div></sc-if>
+            </sc-if>
+
+            <sc-if value="{{ tabBuild }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Build guide</div>
+              <div style="font-size:13px;color:#717680;margin-bottom:18px;">Step-by-step assembly.</div>
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <sc-for list="{{ buildSteps }}" as="s" hint-placeholder-count="3"><div style="display:flex;gap:14px;padding:12px 4px;border-bottom:1px solid #F5F5F5;"><div style="width:26px;height:26px;border-radius:50%;background:#EAF2FF;color:#2D7FF9;font-size:13px;font-weight:700;display:grid;place-items:center;flex:none;">{{ s.n }}</div><div style="font-size:13.5px;line-height:1.5;color:#414651;padding-top:2px;">{{ s.t }}</div></div></sc-for>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{ tabProject }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Project file</div>
+              <div style="font-size:13px;color:#717680;margin-bottom:14px;">Export a file to back up your design or move it to another machine.</div>
+              <div style="display:flex;align-items:center;gap:9px;background:#ECFDF3;border:1px solid #ABEFC6;border-radius:10px;padding:11px 13px;margin-bottom:16px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span style="font-size:12.5px;color:#067647;font-weight:500;line-height:1.45;">Auto-saved in this browser — your mosaic will still be here when you reopen.</span></div>
+              <div style="border:1px solid #E9EAEB;border-radius:12px;padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;"><div style="width:46px;height:46px;border-radius:10px;background:#2D7FF9;display:grid;place-items:center;color:#fff;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4a1 1 0 011-1h9l4 4v13a1 1 0 01-1 1H6a1 1 0 01-1-1z"/><path d="M14 3v5h5"/></svg></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:600;">untitled-mosaic.brickwork</div><div style="font-size:12px;color:#A4A7AE;">Editable project · {{ totalTiles }} tiles, {{ layerCount }} groups</div></div></div>
+              <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <button onClick="{{ doExportJSON }}" style="height:40px;padding:0 18px;border-radius:9px;background:#181D27;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Save project file</button>
+                <label style="height:40px;padding:0 16px;border-radius:9px;border:1px solid #D5D7DA;background:#fff;color:#414651;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="file" accept=".brickwork,.json,application/json" onChange="{{ openProjectFile }}" style="display:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>Open project file</label>
+                <button onClick="{{ newDoc }}" style="height:40px;padding:0 16px;border-radius:9px;border:1px solid #D5D7DA;background:#fff;color:#414651;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>Start new</button>
+              </div>
+            </sc-if>
+          </div>
+          <div style="height:60px;flex:none;border-top:1px solid #F0F0F0;display:flex;align-items:center;justify-content:flex-end;padding:0 24px;"><button onClick="{{ closeExport }}" style="height:38px;padding:0 18px;border-radius:9px;border:1px solid #D5D7DA;background:#fff;font-size:13px;font-weight:600;color:#414651;">Done</button></div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+  <!-- ░░░░░░░░░░░ PROJECT GALLERY ░░░░░░░░░░░ -->
+  <sc-if value="{{ inGallery }}" hint-placeholder-val="{{ true }}">
+    <div style="position:fixed;inset:0;z-index:150;background:#FAFAFA;display:flex;flex-direction:column;">
+      <div style="height:64px;flex:none;background:#fff;border-bottom:1px solid #E9EAEB;display:flex;align-items:center;padding:0 28px;gap:12px;box-shadow:0 1px 2px rgba(16,24,40,.04);">
+        <div style="display:flex;align-items:center;gap:9px;">
+          <div style="width:30px;height:30px;border-radius:8px;background:#2D7FF9;position:relative;box-shadow:0 1px 2px rgba(16,24,40,.18);display:grid;place-items:center;">
+            <div style="width:7px;height:7px;border-radius:50%;background:#fff;box-shadow:10px 0 0 #fff,0 10px 0 #fff,10px 10px 0 #fff;transform:translate(-5px,-5px);"></div>
+          </div>
+          <span style="font-weight:700;font-size:15px;letter-spacing:-.01em;">Brick Studio</span>
+        </div>
+        <div style="flex:1;"></div>
+        <button onClick="{{ createProject }}" style="height:38px;padding:0 16px;border-radius:9px;background:#181D27;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;box-shadow:0 1px 2px rgba(16,24,40,.2);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>New project
+        </button>
+      </div>
+      <div style="flex:1;overflow-y:auto;">
+        <div style="max-width:1160px;margin:0 auto;padding:40px 28px 72px;">
+          <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:5px;">
+            <h1 style="font-size:24px;font-weight:700;margin:0;letter-spacing:-.02em;color:#181D27;">Your mosaics</h1>
+            <span style="font-size:14px;color:#A4A7AE;font-weight:500;">{{ projectCount }}</span>
+          </div>
+          <p style="font-size:14px;color:#717680;margin:0 0 28px;">Pick up where you left off, or start a new build. Everything saves automatically.</p>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:20px;">
+            <button onClick="{{ createProject }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;min-height:286px;border:2px dashed #D5D7DA;border-radius:14px;background:#fff;color:#535862;transition:border-color .15s,background .15s;" style-hover="border-color:#2D7FF9;background:#F6F9FF;">
+              <div style="width:48px;height:48px;border-radius:13px;background:#EAF2FF;display:grid;place-items:center;color:#2D7FF9;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+              <div style="font-size:14px;font-weight:600;">New project</div>
+              <div style="font-size:12px;color:#A4A7AE;">Start a blank baseplate</div>
+            </button>
+            <sc-for list="{{ projectCards }}" as="c" hint-placeholder-count="0">
+              <div onClick="{{ c.onOpen }}" style="display:flex;flex-direction:column;border:1px solid #E9EAEB;border-radius:14px;background:#fff;overflow:hidden;cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.05);transition:box-shadow .15s,border-color .15s;" style-hover="box-shadow:0 6px 20px -6px rgba(16,24,40,.18);border-color:#D5D7DA;">
+                <div style="aspect-ratio:1;background:{{ c.plateBg }};display:grid;place-items:center;border-bottom:1px solid #F0F0F0;overflow:hidden;padding:14px;">
+                  <img src="{{ c.thumb }}" alt="{{ c.name }}" style="width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 4px 10px rgba(8,18,34,.18));">
+                </div>
+                <div style="padding:13px 14px;display:flex;flex-direction:column;gap:3px;">
+                  <sc-if value="{{ c.renaming }}" hint-placeholder-val="{{ false }}">
+                    <input onClick="{{ stop }}" onMouseDown="{{ stop }}" value="{{ renameVal }}" onInput="{{ onRenameInput }}" onBlur="{{ commitRename }}" onKeyDown="{{ onRenameKey }}" style="width:100%;font-size:14px;font-weight:600;color:#181D27;border:1px solid #2D7FF9;border-radius:7px;height:30px;padding:0 8px;outline:none;box-shadow:0 0 0 3px rgba(45,127,249,.18);">
+                  </sc-if>
+                  <sc-if value="{{ c.notRenaming }}" hint-placeholder-val="{{ true }}">
+                    <div style="font-size:14px;font-weight:600;color:#181D27;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ c.name }}</div>
+                  </sc-if>
+                  <div style="font-size:12px;color:#A4A7AE;">{{ c.meta }}</div>
+                  <div style="display:flex;align-items:center;gap:2px;margin-top:9px;">
+                    <span style="flex:1;font-size:11px;color:#A4A7AE;font-weight:500;">{{ c.updated }}</span>
+                    <button onClick="{{ c.onRename }}" title="Rename" style="width:28px;height:28px;border-radius:7px;display:grid;place-items:center;color:#A4A7AE;" style-hover="background:#F4F5F7;color:#535862;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
+                    <button onClick="{{ c.onDup }}" title="Duplicate" style="width:28px;height:28px;border-radius:7px;display:grid;place-items:center;color:#A4A7AE;" style-hover="background:#F4F5F7;color:#535862;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 012-2h10"/></svg></button>
+                    <button onClick="{{ c.onDelete }}" title="Delete" style="width:28px;height:28px;border-radius:7px;display:grid;place-items:center;color:#A4A7AE;" style-hover="background:#FEF3F2;color:#D92D20;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a1 1 0 011-1h6a1 1 0 011 1v2M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg></button>
+                  </div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+</div>
 </x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;plateStuds&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;16&quot;,&quot;32&quot;],&quot;default&quot;:&quot;16&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showStuds&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  CELL = 40;
+  state = {
+    tool:'place', zoom:1,
+    studs:16, plateColor:'teal', showStuds:true, showGrid:false,
+    tiles:[], groups:[], groupCounter:0,
+    selIds:[], selGroup:null,
+    placePart:'quarter', placeColor:'coral', placeRot:0,
+    swapOpen:false, colorPopOpen:false, barColorOpen:false, barPartOpen:false,
+    ctxOpen:false, ctxX:0, ctxY:0,
+    exportOpen:false, exportTab:'png',
+    expanded:{tiles:true},
+    replaceFrom:'coral', replaceTo:'white',
+    leftOpen:true, rightOpen:true,
+    marquee:null,
+    customColors:[], templates:[], customSize:'', newTemplateName:'', pickerHex:'',
+    view:'gallery', projects:[], currentId:null, projTitle:'Untitled mosaic',
+    editingTitle:false, renamingId:null, renameVal:'',
+  };
+
+  PARTS = {
+    square: {num:'3070',  label:'1×1',         full:'1×1 Tile',              w:1,h:1, shape:'square',  key:'S'},
+    brick2: {num:'3069',  label:'1×2',         full:'1×2 Tile',              w:2,h:1, shape:'square',  key:'2'},
+    brick4: {num:'2431',  label:'1×4',         full:'1×4 Tile',              w:4,h:1, shape:'square',  key:'4'},
+    round1: {num:'98138', label:'Round',       full:'1×1 Tile, Round',       w:1,h:1, shape:'round',   key:'O'},
+    round2: {num:'14769', label:'2×2 round',   full:'2×2 Tile, Round',       w:2,h:2, shape:'round',   key:'D'},
+    round3: {num:'67095', label:'3×3 round',   full:'3×3 Tile, Round',       w:3,h:3, shape:'round',   key:'3'},
+    quarter:{num:'25269', label:'¼-circle',    full:'1×1 Tile w/ ¼-Circle',  w:1,h:1, shape:'quarter', key:'Q'},
+    end1:   {num:'24246', label:'1×1 end',     full:'1×1 Tile, Ø1 End',      w:1,h:1, shape:'half',    key:'J'},
+    half:   {num:'1748',  label:'½-circle',    full:'1×2 Tile w/ ½-Circle',  w:2,h:1, shape:'half',    key:'H'},
+    end2:   {num:'5520',  label:'2×2 end',     full:'2×2 Tile, Ø2 End',      w:2,h:2, shape:'half',    key:'K'},
+    stad12: {num:'1126',  label:'1×2 stadium', full:'1×2 Tile, Ø1 Ends',     w:2,h:1, shape:'stadium', key:'T'},
+    stad24: {num:'66857', label:'2×4 stadium', full:'2×4 Tile, Ø2 Ends',     w:4,h:2, shape:'stadium', key:'Y'},
+    stad68: {num:'65474', label:'6×8 stadium', full:'6×8 Tile, Ø6 Ends',     w:8,h:6, shape:'stadium', key:'U'},
+    corner2:{num:'27925', label:'2×2 corner',  full:'2×2 Tile, Ø4 Corner',   w:2,h:2, shape:'corner',  key:'C'},
+    corner3:{num:'79393', label:'3×3 corner',  full:'3×3 Tile, Ø6 Corner',   w:3,h:3, shape:'corner',  key:'X'},
+    corner4:{num:'27507', label:'4×4 corner',  full:'4×4 Tile, Ø8 Corner',   w:4,h:4, shape:'corner',  key:'L'},
+  };
+  COLORS = [
+    {id:'white', name:'White',          hex:'#F3F4EE', lego:'1'},
+    {id:'mint',  name:'Light Aqua',     hex:'#C2E7DC', lego:'323'},
+    {id:'teal',  name:'Dark Turquoise', hex:'#12B6CC', lego:'107'},
+    {id:'azure', name:'Medium Azure',   hex:'#2BA6E0', lego:'322'},
+    {id:'coral', name:'Bright Orange',  hex:'#F7941D', lego:'191'},
+    {id:'red',   name:'Vibrant Coral',  hex:'#EF4A2B', lego:'353'},
+    {id:'yellow',name:'Bright Yellow',  hex:'#F8C62E', lego:'24'},
+    {id:'lilac', name:'Bright Pink',    hex:'#F29CC3', lego:'13'},
+    {id:'black', name:'Dark Pink',      hex:'#D12E8B', lego:'221'},
+  ];
+
+  componentDidMount(){
+    let customColors=[], templates=[], projects=[];
+    try{ const a=JSON.parse(localStorage.getItem('brickwork.customColors')||'[]'); if(Array.isArray(a)) customColors=a; }catch(e){}
+    try{ const b=JSON.parse(localStorage.getItem('brickwork.templates')||'[]'); if(Array.isArray(b)) templates=b; }catch(e){}
+    try{ const p=JSON.parse(localStorage.getItem('brickwork.projects')||'null'); if(Array.isArray(p)) projects=p; }catch(e){}
+    // migrate a pre-gallery single document into a first project
+    if(!projects.length){
+      try{ const s=JSON.parse(localStorage.getItem('brickwork.doc')||'null'); if(s&&Array.isArray(s.tiles)&&s.tiles.length){ projects=[{id:this.newProjId(), name:'My first mosaic', doc:s, thumb:'', updatedAt:Date.now()}]; } }catch(e){}
+    }
+    this._projects=projects;
+    this.persist('brickwork.projects', projects);
+    this.setState({ customColors, templates, projects, view:'gallery' });
+    window.addEventListener('keydown', this.onKey);
+    window.addEventListener('resize', this.fit);
+  }
+  componentDidUpdate(prev){
+    if(this.state.view==='editor' && this.state.currentId){
+      const cur=this.serializeDoc();
+      if(cur!==this._lastSaved){ this._lastSaved=cur; this.saveCurrent(false); clearTimeout(this._thumbT); this._thumbT=setTimeout(()=>this.saveCurrent(true), 700); }
+    }
+  }
+
+  /* ---------- project gallery ---------- */
+  newProjId(){ return 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+  blankDoc(){ return {tiles:[], groups:[], groupCounter:0, studs: (this.props.plateStuds==='32'?32:16), plateColor:'teal', showStuds:(this.props.showStuds!==undefined?this.props.showStuds:true), showGrid:false}; }
+  renderThumb(doc){ try{ const n=doc.studs||16, S=2, px=148, cell=px/n; const cv=document.createElement('canvas'); cv.width=px*S; cv.height=px*S; const g=cv.getContext('2d'); g.scale(S,S); g.fillStyle=this.colorHex(doc.plateColor); g.fillRect(0,0,px,px); for(const t of (doc.tiles||[])){ if(t.hidden) continue; this.drawTile(g,t,cell); } return cv.toDataURL('image/png'); }catch(e){ return ''; } }
+  saveCurrent(withThumb){ const id=this.state.currentId; if(!id||!this._projects) return; const p=this._projects.find(x=>x.id===id); if(!p) return; p.doc=JSON.parse(this.serializeDoc()); p.name=this.state.projTitle||p.name; p.updatedAt=Date.now(); if(withThumb) p.thumb=this.renderThumb(p.doc); this.persist('brickwork.projects', this._projects); }
+  createProject = ()=>{ const doc=this.blankDoc(); const proj={id:this.newProjId(), name:'Untitled mosaic', doc, thumb:'', updatedAt:Date.now()}; this._projects=[proj, ...this._projects]; this.persist('brickwork.projects', this._projects); this.openProject(proj.id); };
+  openProject = (id)=>{ const p=(this._projects||[]).find(x=>x.id===id); if(!p) return; const d=p.doc||this.blankDoc(); this._id=(d.tiles||[]).reduce((m,t)=>Math.max(m, parseInt(String(t.id).replace(/\D/g,''),10)||0), 0); this._undo=[]; this._redo=[]; this.setState({ view:'editor', currentId:id, projTitle:p.name||'Untitled mosaic', editingTitle:false, tiles:(d.tiles||[]).map(t=>({...t})), groups:d.groups||[], groupCounter:d.groupCounter||0, studs:d.studs||16, plateColor:d.plateColor||'teal', showStuds:d.showStuds!==undefined?d.showStuds:true, showGrid:d.showGrid||false, selIds:[], selGroup:null, ctxOpen:false, exportOpen:false }, ()=>{ this._lastSaved=this.serializeDoc(); setTimeout(this.fit,80); }); };
+  backToGallery = ()=>{ clearTimeout(this._thumbT); this.saveCurrent(true); this.setState({ view:'gallery', projects:this._projects.slice(), selIds:[], selGroup:null, ctxOpen:false, exportOpen:false, editingTitle:false }); };
+  deleteProject = (id)=>{ this._projects=(this._projects||[]).filter(x=>x.id!==id); this.persist('brickwork.projects', this._projects); this.setState({projects:this._projects.slice()}); };
+  duplicateProject = (id)=>{ const p=(this._projects||[]).find(x=>x.id===id); if(!p) return; const copy={id:this.newProjId(), name:(p.name||'Mosaic')+' copy', doc:JSON.parse(JSON.stringify(p.doc||this.blankDoc())), thumb:p.thumb||'', updatedAt:Date.now()}; const i=this._projects.indexOf(p); this._projects.splice(i+1,0,copy); this.persist('brickwork.projects', this._projects); this.setState({projects:this._projects.slice()}); };
+  startRename = (id,name)=>{ this.setState({renamingId:id, renameVal:name||''}); };
+  commitRename = ()=>{ const id=this.state.renamingId; if(id){ const p=(this._projects||[]).find(x=>x.id===id); if(p){ p.name=(this.state.renameVal||'').trim()||p.name; p.updatedAt=Date.now(); this.persist('brickwork.projects', this._projects); } } this.setState({renamingId:null, renameVal:'', projects:this._projects.slice()}); };
+  startEditTitle = ()=>{ this.setState({editingTitle:true}); };
+  onTitleInput = (e)=>{ this.setState({projTitle:e.target.value}); };
+  commitTitle = ()=>{ const id=this.state.currentId; const name=(this.state.projTitle||'').trim()||'Untitled mosaic'; if(id){ const p=(this._projects||[]).find(x=>x.id===id); if(p){ p.name=name; this.persist('brickwork.projects', this._projects); } } this.setState({editingTitle:false, projTitle:name}); };
+  relTime(ts){ if(!ts) return 'just now'; const s=Math.floor((Date.now()-ts)/1000); if(s<60) return 'just now'; const m=Math.floor(s/60); if(m<60) return m+' min ago'; const h=Math.floor(m/60); if(h<24) return h+'h ago'; const d=Math.floor(h/24); if(d<7) return d+(d===1?' day ago':' days ago'); return new Date(ts).toLocaleDateString(undefined,{month:'short',day:'numeric'}); }
+  onRenameInput = (e)=>{ this.setState({renameVal:e.target.value}); };
+  onRenameKey = (e)=>{ if(e.key==='Enter'){ e.preventDefault(); this.commitRename(); } else if(e.key==='Escape'){ this.setState({renamingId:null, renameVal:''}); } };
+  onTitleKey = (e)=>{ if(e.key==='Enter'){ e.preventDefault(); this.commitTitle(); } else if(e.key==='Escape'){ this.setState({editingTitle:false}); } };
+  generate(){ this._id=0; const tiles=this.seedMosaic(this.state.studs); this.setState({tiles, groups:[], groupCounter:0, selIds:[], selGroup:null, ctxOpen:false}, ()=> setTimeout(this.fit,80)); }
+  // symmetric DOTS-style starter: every 2×2 block of quarter tiles forms a circle,
+  // colored in concentric rings with a 1-stud parity split for the petal/leaf look.
+  seedMosaic(n){
+    const ring=['black','coral','lilac','yellow','red','mint','azure','white'];
+    const c=(n-1)/2, tiles=[];
+    for(let y=0;y<n;y++) for(let x=0;x<n;x++){
+      const lx=x&1, ly=y&1;
+      const rot=(lx===0&&ly===0)?180:(lx===1&&ly===0)?270:(lx===0&&ly===1)?90:0; // round corner faces block centre
+      const d=Math.floor(Math.max(Math.abs(x-c),Math.abs(y-c)));
+      const color=ring[(d+((x+y)&1))%ring.length];
+      tiles.push({id:this.nextId(), part:'quarter', color, rot, x, y, group:null, hidden:false, locked:false});
+    }
+    return tiles;
+  }
+
+  canvasRef = (el)=>{ if(el){ this.canvasEl=el; setTimeout(this.fit,60); } };
+  fit = ()=>{ const el=this.canvasEl||document.querySelector('[data-canvas]'); if(!el) return; const r=el.getBoundingClientRect(); if(r.width<40){ setTimeout(this.fit,80); return; } const sz=this.state.studs*this.CELL; const z=Math.max(0.3, Math.min(1.4, (Math.min(r.width,r.height)-80)/sz)); if(Math.abs(z-this.state.zoom)>0.01) this.setState({zoom:+z.toFixed(2)}); };
+
+  /* ---------- helpers ---------- */
+  colorHex(id){ if(typeof id==='string' && id[0]==='#') return id; const c=this.COLORS.find(c=>c.id===id); if(c) return c.hex; const cc=(this.state.customColors||[]).find(c=>c.hex===id); return cc?cc.hex:'#ccc'; }
+  colorName(id){ const c=this.COLORS.find(c=>c.id===id); return c?c.name:id; }
+  tileById(id){ return this.state.tiles.find(t=>t.id===id); }
+  selList(){ const s=new Set(this.state.selIds); return this.state.tiles.filter(t=>s.has(t.id)); }
+  head(){ return this.selList()[0]||null; }
+  selTile(){ return this.state.selIds.length===1 ? this.tileById(this.state.selIds[0]) : null; }
+  shade(hex,amt){ const n=parseInt(hex.slice(1),16); let r=(n>>16)&255,g=(n>>8)&255,b=n&255; const f=x=>Math.max(0,Math.min(255,Math.round(x+255*amt))); return '#'+((1<<24)+(f(r)<<16)+(f(g)<<8)+f(b)).toString(16).slice(1); }
+  footprint(t){ const p=this.PARTS[t.part]; let w=p.w,h=p.h; if(p.w!==p.h && (t.rot===90||t.rot===270)){ w=p.h; h=p.w; } return {x:t.x,y:t.y,w,h}; }
+  overlap(a,b){ const A=this.footprint(a),B=this.footprint(b); return A.x<B.x+B.w && A.x+A.w>B.x && A.y<B.y+B.h && A.y+A.h>B.y; }
+  tileAt(cx,cy){ const ts=this.state.tiles; for(let i=ts.length-1;i>=0;i--){ const t=ts[i]; if(t.hidden) continue; const f=this.footprint(t); if(cx>=f.x&&cx<f.x+f.w&&cy>=f.y&&cy<f.y+f.h) return t; } return null; }
+  nextId(){ this._id=(this._id||0)+1; return 'tx'+this._id; }
+  quarterClip(rot){ const m={0:'0% 0%',90:'100% 0%',180:'100% 100%',270:'0% 100%'}; return 'circle(99.5% at '+(m[rot]||m[0])+')'; }
+  halfRadius(rot){ const m={0:'999px 999px 0 0',90:'0 999px 999px 0',180:'0 0 999px 999px',270:'999px 0 0 999px'}; return m[rot]||m[0]; }
+
+  /* ---------- tile render (with real depth) ---------- */
+  tileStyle(t){
+    const cell=this.CELL, p=this.PARTS[t.part], C=this.colorHex(t.color), f=this.footprint(t);
+    const inset=1.5;
+    const s={ position:'absolute', left:(t.x*cell+inset)+'px', top:(t.y*cell+inset)+'px',
+      width:(f.w*cell-inset*2)+'px', height:(f.h*cell-inset*2)+'px',
+      backgroundColor:C, pointerEvents:'none', opacity:t.hidden?0:1, zIndex:5,
+      // short soft shadow dropped into the seam — matte plastic sitting just above the plate
+      filter:'drop-shadow(0 1.6px 1px rgba(8,42,48,.30)) drop-shadow(0 .4px .3px rgba(8,42,48,.20))' };
+    // matte satin face: faint top sheen fading to a soft bottom shade (no glossy diagonal)
+    s.backgroundImage='linear-gradient(180deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,0) 32%, rgba(0,0,0,.045) 76%, rgba(0,0,0,.11) 100%)';
+    // thin chamfered edge — bright top lip, darker bottom lip
+    const bevel='inset 0 1px 0 rgba(255,255,255,.42), inset 0 -1.4px .8px rgba(0,0,0,.13), inset 0 0 0 1px rgba(0,0,0,.045)';
+    if(p.shape==='round'){ s.borderRadius='50%'; s.boxShadow=bevel; }
+    else if(p.shape==='square'){ s.borderRadius=(cell*0.1)+'px'; s.boxShadow=bevel; }
+    else if(p.shape==='quarter'){ s.clipPath=this.quarterClip(t.rot); s.boxShadow=bevel; }
+    else if(p.shape==='half'){ s.borderRadius=this.halfRadius(t.rot); s.boxShadow=bevel; }
+    else if(p.shape==='stadium'){ s.borderRadius='9999px'; s.boxShadow=bevel; }
+    else if(p.shape==='corner'){ const W=f.w*cell-inset*2, H=f.h*cell-inset*2, outer=Math.min(W,H), band=outer/Math.min(f.w,f.h), inner=outer-band; const piv={0:'0% 100%',90:'0% 0%',180:'100% 0%',270:'100% 100%'}[t.rot]||'0% 100%'; const mk='radial-gradient(circle '+outer+'px at '+piv+', transparent 0 '+inner+'px, #000 '+inner+'px '+outer+'px, transparent '+outer+'px)'; s.WebkitMaskImage=mk; s.maskImage=mk; s.boxShadow=bevel; }
+    return s;
+  }
+
+  /* ---------- canvas interaction ---------- */
+  plateRef = (el)=>{ this.plateEl=el; };
+  stop = (e)=>{ e.stopPropagation(); };
+  closePops(){ this.setState({swapOpen:false,colorPopOpen:false,barColorOpen:false,barPartOpen:false,ctxOpen:false}); }
+  cellFromEvent(e){ const el=this.plateEl; if(!el) return {cx:-1,cy:-1}; const r=el.getBoundingClientRect(); const c=this.CELL*this.state.zoom; return {cx:Math.floor((e.clientX-r.left)/c), cy:Math.floor((e.clientY-r.top)/c)}; }
+  platePx(e){ const el=this.plateEl; const r=el.getBoundingClientRect(); return {px:Math.max(0,Math.min(e.clientX-r.left,r.width)), py:Math.max(0,Math.min(e.clientY-r.top,r.height))}; }
+
+  onCanvasBgDown = (e)=>{ if(e.target===e.currentTarget){ this.setState({selIds:[], selGroup:null, ctxOpen:false, swapOpen:false, colorPopOpen:false}); } };
+
+  onPlateDown = (e)=>{
+    if(e.button===2) return;
+    this.closePops();
+    const {cx,cy}=this.cellFromEvent(e); const n=this.state.studs; const inb=cx>=0&&cy>=0&&cx<n&&cy<n;
+    if(this.state.tool==='place'){ if(inb) this.placeAt(cx,cy); return; }
+    if(this.state.tool==='eraser'){ if(inb) this.eraseAt(cx,cy); return; }
+    // SELECT tool
+    const t = inb ? this.tileAt(cx,cy) : null;
+    if(t && !t.locked){
+      const sx=e.clientX, sy=e.clientY;
+      if(e.shiftKey){ const s=new Set(this.state.selIds); s.has(t.id)?s.delete(t.id):s.add(t.id); this.setState({selIds:[...s], selGroup:null}); return; }
+      const inSel = this.state.selGroup ? (t.group===this.state.selGroup) : this.state.selIds.includes(t.id);
+      if(inSel){ this.beginDrag(sx,sy); }
+      else { this.setState({selIds:[t.id], selGroup:null}, ()=>this.beginDrag(sx,sy)); }
+      return;
+    }
+    // marquee on empty
+    const {px,py}=this.platePx(e);
+    this._base = e.shiftKey ? this.state.selIds.slice() : [];
+    this._marqActive=true;
+    this.setState({selGroup:null, selIds:this._base.slice(), marquee:{x0:px,y0:py,x1:px,y1:py}});
+    window.addEventListener('mousemove', this.onMarqMove);
+    window.addEventListener('mouseup', this.onMarqUp);
+  };
+  onMarqMove = (e)=>{
+    if(!this._marqActive) return;
+    const {px,py}=this.platePx(e); const m={...this.state.marquee,x1:px,y1:py};
+    const z=this.state.zoom, cell=this.CELL, u=cell*z;
+    const minX=Math.min(m.x0,m.x1)/u, maxX=Math.max(m.x0,m.x1)/u, minY=Math.min(m.y0,m.y1)/u, maxY=Math.max(m.y0,m.y1)/u;
+    const s=new Set(this._base);
+    for(const t of this.state.tiles){ if(t.hidden||t.locked) continue; const f=this.footprint(t); if(t.x<maxX&&t.x+f.w>minX&&t.y<maxY&&t.y+f.h>minY) s.add(t.id); }
+    this.setState({marquee:m, selIds:[...s]});
+  };
+  onMarqUp = ()=>{ this._marqActive=false; window.removeEventListener('mousemove',this.onMarqMove); window.removeEventListener('mouseup',this.onMarqUp); this.setState({marquee:null}); };
+
+  /* ---------- drag selection to a new place ---------- */
+  beginDrag(sx,sy){
+    const moving = this.state.selGroup ? this.state.tiles.filter(t=>t.group===this.state.selGroup) : this.selList();
+    const movable = moving.filter(t=>!t.locked);
+    if(!movable.length || !this.plateEl) return;
+    const u=this.CELL*this.state.zoom, r=this.plateEl.getBoundingClientRect();
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    for(const t of movable){ const f=this.footprint(t); minX=Math.min(minX,t.x); minY=Math.min(minY,t.y); maxX=Math.max(maxX,t.x+f.w); maxY=Math.max(maxY,t.y+f.h); }
+    this._dragSnap=this.serializeDoc();
+    this._drag={ ids:movable.map(t=>t.id), starts:Object.fromEntries(movable.map(t=>[t.id,{x:t.x,y:t.y}])), ox:(sx-r.left)/u, oy:(sy-r.top)/u, minX, minY, maxX, maxY, moved:false };
+    this.setState({dragging:true});
+    window.addEventListener('mousemove', this.onDragMove);
+    window.addEventListener('mouseup', this.onDragUp);
+  }
+  onDragMove = (e)=>{
+    const D=this._drag; if(!D||!this.plateEl) return;
+    const u=this.CELL*this.state.zoom, r=this.plateEl.getBoundingClientRect(), n=this.state.studs;
+    let dx=Math.round((e.clientX-r.left)/u - D.ox), dy=Math.round((e.clientY-r.top)/u - D.oy);
+    dx=Math.max(-D.minX, Math.min(dx, n-D.maxX));
+    dy=Math.max(-D.minY, Math.min(dy, n-D.maxY));
+    if(dx!==0||dy!==0) D.moved=true;
+    const set=new Set(D.ids);
+    this.setState({tiles:this.state.tiles.map(t=> set.has(t.id)?{...t,x:D.starts[t.id].x+dx, y:D.starts[t.id].y+dy}:t)});
+  };
+  onDragUp = ()=>{ window.removeEventListener('mousemove',this.onDragMove); window.removeEventListener('mouseup',this.onDragUp); const moved=this._drag&&this._drag.moved; this._drag=null; if(moved&&this._dragSnap) this.pushHistory(this._dragSnap); this._dragSnap=null; this.setState({dragging:false}); };
+
+  /* ---------- on-tile rotate handle ---------- */
+  onRotateDown = (e)=>{ e.stopPropagation(); const t=this.selTile(); if(!t) return; this.pushHistory(); const el=this.plateEl; const r=el.getBoundingClientRect(); const u=this.CELL*this.state.zoom; const f=this.footprint(t); const cx=r.left+(t.x+f.w/2)*u, cy=r.top+(t.y+f.h/2)*u; this._rot={id:t.id,cx,cy,start:Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI,startRot:t.rot,moved:false}; window.addEventListener('mousemove',this.onRotateMove); window.addEventListener('mouseup',this.onRotateUp); };
+  onRotateMove = (e)=>{ const R=this._rot; if(!R) return; const cur=Math.atan2(e.clientY-R.cy,e.clientX-R.cx)*180/Math.PI; const snapped=Math.round((cur-R.start)/90)*90; if(snapped!==0) R.moved=true; this.updTile(R.id,{rot:((R.startRot+snapped)%360+360)%360}); };
+  onRotateUp = ()=>{ const R=this._rot; window.removeEventListener('mousemove',this.onRotateMove); window.removeEventListener('mouseup',this.onRotateUp); if(R&&!R.moved){ const t=this.tileById(R.id); if(t) this.updTile(R.id,{rot:(t.rot+90)%360}); } this._rot=null; };
+
+  onPlateCtx = (e)=>{ e.preventDefault(); const {cx,cy}=this.cellFromEvent(e); const n=this.state.studs; if(cx<0||cy<0||cx>=n||cy>=n) return; const t=this.tileAt(cx,cy); const cell=this.CELL; if(t && !this.state.selIds.includes(t.id)) this.setState({selIds:[t.id], selGroup:null}); this.setState({ctxOpen:true, ctxX:Math.min(cx*cell+cell, n*cell-176), ctxY:cy*cell, swapOpen:false, colorPopOpen:false}); };
+
+  placeAt(cx,cy){ const n=this.state.studs; const base={part:this.state.placePart,color:this.state.placeColor,rot:this.state.placeRot,x:cx,y:cy,group:null,hidden:false,locked:false}; const f=this.footprint(base); if(cx+f.w>n||cy+f.h>n) return; this.pushHistory(); let tiles=this.state.tiles.filter(o=>o.locked||!this.overlap(o,base)); const id=this.nextId(); tiles.push({...base,id}); this.setState({tiles, selIds:[id], selGroup:null}); }
+  eraseAt(cx,cy){ const t=this.tileAt(cx,cy); if(!t||t.locked) return; this.pushHistory(); this.setState({tiles:this.state.tiles.filter(o=>o.id!==t.id), selIds:this.state.selIds.filter(id=>id!==t.id)}); }
+
+  /* ---------- selection ops (batch-aware) ---------- */
+  updTile(id,patch){ this.setState({tiles:this.state.tiles.map(t=>t.id===id?{...t,...patch}:t)}); }
+  mapSel(fn){ this.pushHistory(); const s=new Set(this.state.selIds); this.setState({tiles:this.state.tiles.map(t=>s.has(t.id)?{...t,...fn(t)}:t)}); }
+  rotateSel = ()=>{ this.mapSel(t=>({rot:(t.rot+90)%360})); };
+  dupSel = ()=>{ const list=this.selList(); if(!list.length) return; this.pushHistory(); const n=this.state.studs; const add=list.map(t=>{ const f=this.footprint(t); return {...t,id:this.nextId(),x:Math.min(t.x+1,n-f.w),y:Math.min(t.y+1,n-f.h)}; }); this.setState({tiles:[...this.state.tiles,...add], selIds:add.map(a=>a.id), ctxOpen:false}); };
+  delSel = ()=>{ const s=new Set(this.state.selIds); if(!s.size) return; this.pushHistory(); this.setState({tiles:this.state.tiles.filter(t=>!s.has(t.id)), selIds:[], ctxOpen:false}); };
+  swapPartSel(part){ if(this.state.selIds.length) this.mapSel(()=>({part})); this.setState({placePart:part, swapOpen:false, barPartOpen:false}); }
+  setColorSel(id){ if(this.state.selIds.length) this.mapSel(()=>({color:id})); this.setState({placeColor:id, colorPopOpen:false, barColorOpen:false}); }
+  setRotSel(deg){ if(this.state.selIds.length) this.mapSel(()=>({rot:deg})); this.setState({placeRot:deg}); }
+  flipH = ()=>{ const m={0:90,90:0,180:270,270:180}; this.mapSel(t=>({rot:m[t.rot]})); };
+  flipV = ()=>{ const m={0:270,90:180,180:90,270:0}; this.mapSel(t=>({rot:m[t.rot]})); };
+  moveSel(dx,dy){ const t=this.selTile(); if(!t) return; this.pushHistory(); const n=this.state.studs,f=this.footprint(t); this.updTile(t.id,{x:Math.max(0,Math.min(t.x+dx,n-f.w)), y:Math.max(0,Math.min(t.y+dy,n-f.h))}); }
+  setLayerSel(g){ const t=this.selTile(); if(t){ this.pushHistory(); this.updTile(t.id,{group:g}); } }
+  selectAll = ()=>{ this.setState({selIds:this.state.tiles.filter(t=>!t.hidden&&!t.locked).map(t=>t.id), selGroup:null}); };
+
+  /* ---------- groups / layers ---------- */
+  selType(){ if(this.state.selGroup) return 'group'; const n=this.state.selIds.length; if(n===1) return 'tile'; if(n>1) return 'multi'; return 'document'; }
+  selectGroup(g){ this.setState({selGroup:g, selIds:[], ctxOpen:false}); const tiles=this.state.tiles.filter(t=>t.group===g); if(tiles.length){ const cs=[...new Set(tiles.map(t=>t.color))]; this.setState({replaceFrom:cs[0], replaceTo:cs[1]||'white'}); } }
+  toggleExpand(id){ this.setState({expanded:{...this.state.expanded,[id]:!this.state.expanded[id]}}); }
+  toggleGroupVis(g){ const tiles=this.state.tiles; const anyVis=tiles.some(t=>t.group===g&&!t.hidden); this.setState({tiles:tiles.map(t=>t.group===g?{...t,hidden:anyVis}:t)}); }
+  toggleGroupLock(g){ const tiles=this.state.tiles; const anyUn=tiles.some(t=>t.group===g&&!t.locked); this.setState({tiles:tiles.map(t=>t.group===g?{...t,locked:anyUn}:t)}); }
+  groupSel = ()=>{ const ids=this.state.selIds; if(ids.length<1) return; this.pushHistory(); const num=this.state.groupCounter+1; const id='g'+num; const set=new Set(ids); this.setState({ tiles:this.state.tiles.map(t=>set.has(t.id)?{...t,group:id}:t), groups:[...this.state.groups,{id,name:'Group '+num}], groupCounter:num, selGroup:id, selIds:[], ctxOpen:false }); };
+  ungroupSel = ()=>{ const g=this.state.selGroup; if(!g) return; this.pushHistory(); this.setState({tiles:this.state.tiles.map(t=>t.group===g?{...t,group:null}:t), groups:this.state.groups.filter(x=>x.id!==g), selGroup:null}); };
+  rotateGroup = ()=>{ const g=this.state.selGroup; if(!g) return; this.pushHistory(); const n=this.state.studs; this.setState({tiles:this.state.tiles.map(t=> t.group===g?{...t,x:n-1-t.y,y:t.x,rot:(t.rot+90)%360}:t)}); };
+  applyReplace = ()=>{ const g=this.state.selGroup; if(!g) return; this.pushHistory(); const {replaceFrom,replaceTo}=this.state; this.setState({tiles:this.state.tiles.map(t=> (t.group===g&&t.color===replaceFrom)?{...t,color:replaceTo}:t)}); };
+
+  /* ---------- chrome ---------- */
+  pickSelect = ()=> this.setState({tool:'select'});
+  pickPlace = ()=> this.setState({tool:'place', selIds:[], selGroup:null});
+  pickEraser = ()=> this.setState({tool:'eraser'});
+  zoomIn = ()=> this.setState({zoom:Math.min(2,+(this.state.zoom+0.1).toFixed(2))});
+  zoomOut = ()=> this.setState({zoom:Math.max(0.3,+(this.state.zoom-0.1).toFixed(2))});
+  zoomFit = ()=> this.fit();
+  toggleColorPop = ()=> this.setState({colorPopOpen:!this.state.colorPopOpen, swapOpen:false});
+  toggleSwap = ()=> this.setState({swapOpen:!this.state.swapOpen, colorPopOpen:false});
+  toggleBarColor = ()=> this.setState({barColorOpen:!this.state.barColorOpen, barPartOpen:false});
+  toggleBarPart = ()=> this.setState({barPartOpen:!this.state.barPartOpen, barColorOpen:false});
+  collapseLeft = ()=> this.setState({leftOpen:false},()=>setTimeout(this.fit,60));
+  expandLeft = ()=> this.setState({leftOpen:true},()=>setTimeout(this.fit,60));
+  collapseRight = ()=> this.setState({rightOpen:false},()=>setTimeout(this.fit,60));
+  expandRight = ()=> this.setState({rightOpen:true},()=>setTimeout(this.fit,60));
+  size16 = ()=> { this.pushHistory(); this.setState({studs:16},()=>setTimeout(this.fit,60)); };
+  size32 = ()=> { this.pushHistory(); this.setState({studs:32},()=>setTimeout(this.fit,60)); };
+  setSize(n){ n=Math.max(4,Math.min(64,Math.round(n))); if(!n||n===this.state.studs) return; this.pushHistory(); this.setState({studs:n},()=>setTimeout(this.fit,60)); }
+  applyCustomSize = ()=>{ const n=parseInt(this.state.customSize,10); if(n>=4&&n<=64) this.setSize(n); };
+  /* custom + saved colors */
+  onPlateHexFocus = ()=>{ this._plateBefore=this.serializeDoc(); };
+  onPlateHexInput = (e)=>{ this.setState({plateColor:e.target.value, pickerHex:e.target.value}); };
+  onPlateHexChange = (e)=>{ if(this._plateBefore){ this.pushHistory(this._plateBefore); this._plateBefore=null; } this.setState({plateColor:e.target.value, pickerHex:e.target.value}); };
+  saveCustomColor = ()=>{ let hex=this.state.pickerHex||this.colorHex(this.state.plateColor); if(typeof hex!=='string'||hex[0]!=='#') return; const lo=hex.toLowerCase(); const cc=(this.state.customColors||[]); if(cc.some(c=>c.hex.toLowerCase()===lo)) return; const next=[...cc,{hex,name:'Custom color'}]; this.setState({customColors:next}); this.persist('brickwork.customColors',next); };
+  removeCustomColor = (hex)=>{ const next=(this.state.customColors||[]).filter(c=>c.hex!==hex); this.setState({customColors:next}); this.persist('brickwork.customColors',next); };
+  /* templates */
+  saveTemplate = ()=>{ const name=(this.state.newTemplateName||'').trim()||('Template '+((this.state.templates||[]).length+1)); const tpl={id:'t'+Date.now(), name, doc:JSON.parse(this.serializeDoc())}; const next=[...(this.state.templates||[]),tpl]; this.setState({templates:next, newTemplateName:''}); this.persist('brickwork.templates',next); };
+  applyTemplate = (id)=>{ const tpl=(this.state.templates||[]).find(t=>t.id===id); if(!tpl) return; this.pushHistory(); const d=tpl.doc; this._id=Math.max(this._id||0,100000); this.setState({tiles:d.tiles||[], groups:d.groups||[], groupCounter:d.groupCounter||0, studs:d.studs, plateColor:d.plateColor, showStuds:d.showStuds, showGrid:d.showGrid, selIds:[], selGroup:null, ctxOpen:false},()=>setTimeout(this.fit,60)); };
+  deleteTemplate = (id)=>{ const next=(this.state.templates||[]).filter(t=>t.id!==id); this.setState({templates:next}); this.persist('brickwork.templates',next); };
+  persist(key,val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(e){} }
+  setPlate(id){ this.pushHistory(); this.setState({plateColor:id}); }
+  toggleStuds = ()=> { this.pushHistory(); this.setState({showStuds:!this.state.showStuds}); };
+  toggleGrid = ()=> { this.pushHistory(); this.setState({showGrid:!this.state.showGrid}); };
+  newDoc = ()=>{ this.pushHistory(); this._id=0; this.setState({tiles:[], groups:[], groupCounter:0, selIds:[], selGroup:null, ctxOpen:false, exportOpen:false}, ()=>setTimeout(this.fit,60)); };
+  openProjectFile = (e)=>{
+    const f=e.target.files&&e.target.files[0]; if(!f) return; const rd=new FileReader();
+    rd.onload=()=>{ try{ const d=JSON.parse(rd.result);
+      const tiles=(d.tiles||[]).map(t=>('p' in t)?{id:this.nextId(),part:t.p,color:t.c,rot:t.r||0,x:t.x,y:t.y,group:t.g||null,hidden:false,locked:false}:{...t,id:t.id||this.nextId()});
+      this._id=tiles.reduce((m,t)=>Math.max(m, parseInt(String(t.id).replace(/\D/g,''),10)||0), this._id||0);
+      this.pushHistory();
+      this.setState({tiles, groups:d.groups||[], groupCounter:d.groupCounter||0, studs:d.studs||this.state.studs, plateColor:d.plateColor||this.state.plateColor, showStuds:d.showStuds!==undefined?d.showStuds:this.state.showStuds, showGrid:d.showGrid||false, selIds:[], selGroup:null, exportOpen:false}, ()=>setTimeout(this.fit,60));
+    }catch(err){} };
+    rd.readAsText(f); e.target.value='';
+  };
+  openExport = ()=> this.setState({exportOpen:true, ctxOpen:false});
+  closeExport = ()=> this.setState({exportOpen:false});
+  setExportTab(t){ this.setState({exportTab:t}); }
+
+  /* ---------- undo / redo history ---------- */
+  serializeDoc(){ const s=this.state; return JSON.stringify({tiles:s.tiles, groups:s.groups, groupCounter:s.groupCounter, studs:s.studs, plateColor:s.plateColor, showStuds:s.showStuds, showGrid:s.showGrid}); }
+  pushHistory(snap){ this._undo=this._undo||[]; this._redo=[]; this._undo.push(snap!==undefined?snap:this.serializeDoc()); if(this._undo.length>120) this._undo.shift(); }
+  applyDoc(str){ const d=JSON.parse(str); this.setState({tiles:d.tiles, groups:d.groups, groupCounter:d.groupCounter, studs:d.studs, plateColor:d.plateColor, showStuds:d.showStuds, showGrid:d.showGrid, selIds:[], selGroup:null, ctxOpen:false, swapOpen:false, colorPopOpen:false}, ()=>setTimeout(this.fit,40)); }
+  undo = ()=>{ if(!this._undo||!this._undo.length) return; this._redo=this._redo||[]; this._redo.push(this.serializeDoc()); this.applyDoc(this._undo.pop()); };
+  redo = ()=>{ if(!this._redo||!this._redo.length) return; this._undo=this._undo||[]; this._undo.push(this.serializeDoc()); this.applyDoc(this._redo.pop()); };
+
+  onKey = (e)=>{
+    if(this.state.exportOpen){ if(e.key==='Escape') this.closeExport(); return; }
+    const tag=(e.target.tagName||'').toLowerCase(); if(tag==='input'||tag==='textarea') return;
+    if(e.key==='Escape'){ this.setState({selIds:[],selGroup:null,ctxOpen:false,swapOpen:false,colorPopOpen:false,barColorOpen:false,barPartOpen:false}); return; }
+    if((e.metaKey||e.ctrlKey)&&(e.key==='a'||e.key==='A')){ e.preventDefault(); this.selectAll(); return; }
+    if((e.metaKey||e.ctrlKey)&&(e.key==='g'||e.key==='G')){ e.preventDefault(); e.shiftKey?this.ungroupSel():this.groupSel(); return; }
+    if((e.metaKey||e.ctrlKey)&&(e.key==='d'||e.key==='D')){ e.preventDefault(); this.dupSel(); return; }
+    if((e.metaKey||e.ctrlKey)&&(e.key==='z'||e.key==='Z')){ e.preventDefault(); e.shiftKey?this.redo():this.undo(); return; }
+    if((e.metaKey||e.ctrlKey)&&(e.key==='y'||e.key==='Y')){ e.preventDefault(); this.redo(); return; }
+    if(e.key==='v'||e.key==='V') this.pickSelect();
+    else if(e.key==='p'||e.key==='P') this.pickPlace();
+    else if(e.key==='e'||e.key==='E') this.pickEraser();
+    else if((e.key==='Delete'||e.key==='Backspace')&&this.state.selIds.length){ e.preventDefault(); this.delSel(); }
+    else if(this.state.selIds.length){
+      if(e.key==='r'||e.key==='R') this.rotateSel();
+      else { const k=e.key.toUpperCase(); const pk=Object.keys(this.PARTS).find(p=>this.PARTS[p].key===k); if(pk) this.swapPartSel(pk); }
+    }
+  };
+
+  /* ---------- export ---------- */
+  bom(){ const m={}; for(const t of this.state.tiles){ const p=this.PARTS[t.part]; const k=t.part+'|'+t.color; if(!m[k]) m[k]={partName:p.full,num:p.num,colorName:this.colorName(t.color),hex:this.colorHex(t.color),count:0}; m[k].count++; } return Object.values(m).sort((a,b)=>b.count-a.count); }
+  download(name,mime,content){ try{ const b=new Blob([content],{type:mime}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500);}catch(err){} }
+  doExportCSV = ()=>{ const rows=[['Part','LEGO Part No.','Color','LEGO Color ID','Quantity']]; for(const b of this.bom()){ const c=this.COLORS.find(c=>c.name===b.colorName); rows.push([b.partName,b.num,b.colorName,c?c.lego:'',b.count]); } const csv=rows.map(r=>r.map(x=>`"${x}"`).join(',')).join('\n'); this.download('mosaic-bom.csv','text/csv',csv); };
+  doExportJSON = ()=>{ const nm=this.state.projTitle||'Untitled mosaic'; const slug=nm.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')||'mosaic'; const data={name:nm,studs:this.state.studs,plateColor:this.state.plateColor,showStuds:this.state.showStuds,showGrid:this.state.showGrid,groups:this.state.groups,groupCounter:this.state.groupCounter,tiles:this.state.tiles.map(t=>({p:t.part,c:t.color,r:t.rot,x:t.x,y:t.y,g:t.group}))}; this.download(slug+'.brickwork','application/json',JSON.stringify(data,null,2)); };
+  doExportPNG = ()=>{ const cell=this.CELL, n=this.state.studs, sc=2; const cv=document.createElement('canvas'); cv.width=n*cell*sc; cv.height=n*cell*sc; const g=cv.getContext('2d'); g.scale(sc,sc); g.fillStyle=this.colorHex(this.state.plateColor); g.fillRect(0,0,n*cell,n*cell); if(this.state.showStuds){ for(let y=0;y<n;y++)for(let x=0;x<n;x++){ g.beginPath(); g.arc(x*cell+cell/2,y*cell+cell*0.46,cell*0.18,0,7); g.fillStyle=this.shade(this.colorHex(this.state.plateColor),-0.05); g.fill(); } } for(const t of this.state.tiles){ if(t.hidden) continue; this.drawTile(g,t,cell); } cv.toBlob(b=>{ if(!b) return; const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download='mosaic.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(u),1500); }); };
+  drawTile(g,t,cell){ const p=this.PARTS[t.part], f=this.footprint(t), C=this.colorHex(t.color); const X=t.x*cell+1.6, Y=t.y*cell+1.6, W=f.w*cell-3.2, H=f.h*cell-3.2; g.save(); g.shadowColor='rgba(12,18,34,.4)'; g.shadowBlur=cell*0.13; g.shadowOffsetX=cell*0.045; g.shadowOffsetY=cell*0.08; g.fillStyle=C; g.beginPath(); if(p.shape==='round'){ g.ellipse(X+W/2,Y+H/2,W/2,H/2,0,0,7); } else if(p.shape==='square'){ g.roundRect(X,Y,W,H,cell*0.12); } else if(p.shape==='stadium'){ g.roundRect(X,Y,W,H,Math.min(W,H)/2); } else if(p.shape==='corner'){ const outer=Math.min(W,H), band=outer/Math.min(f.w,f.h), inner=outer-band; const piv={0:[X,Y+H],90:[X,Y],180:[X+W,Y],270:[X+W,Y+H]}[t.rot]||[X,Y+H]; const a0={0:-Math.PI/2,90:0,180:Math.PI/2,270:Math.PI}[t.rot]||0; g.arc(piv[0],piv[1],outer,a0,a0+Math.PI/2); g.arc(piv[0],piv[1],inner,a0+Math.PI/2,a0,true); g.closePath(); } else if(p.shape==='half'){ if(t.rot===0){ g.arc(X+W/2,Y+H,W/2,Math.PI,0); } else if(t.rot===180){ g.arc(X+W/2,Y,W/2,0,Math.PI); } else if(t.rot===90){ g.arc(X,Y+H/2,H/2,-Math.PI/2,Math.PI/2);} else { g.arc(X+W,Y+H/2,H/2,Math.PI/2,Math.PI*1.5);} } else { const corners={0:[X,Y],90:[X+W,Y],180:[X+W,Y+H],270:[X,Y+H]}; const [cx,cy]=corners[t.rot]; g.moveTo(cx,cy); g.arc(cx,cy,W,this.arcStart(t.rot),this.arcStart(t.rot)+Math.PI/2); g.closePath(); } g.fill(); g.restore(); }
+  arcStart(rot){ return {0:0,90:Math.PI/2,180:Math.PI,270:Math.PI*1.5}[rot]; }
+
+  /* ---------- style helpers ---------- */
+  toolBtn(active){ return {width:'36px',height:'36px',borderRadius:'9px',display:'grid',placeItems:'center', background: active?'#181D27':'transparent', color: active?'#fff':'#717680', boxShadow: active?'0 1px 2px rgba(16,24,40,.2)':'none', transition:'background .12s'}; }
+  segBtn(active){ return {flex:1,height:'26px',padding:'0 11px',borderRadius:'7px',fontSize:'12px',fontWeight:600, background:active?'#fff':'transparent', color:active?'#181D27':'#717680', boxShadow:active?'0 1px 2px rgba(16,24,40,.1)':'none'}; }
+  miniShape(shape,size,color){ const s={width:size+'px',height:size+'px',background:color,flex:'none',display:'inline-block'}; if(shape==='round') s.borderRadius='50%'; else if(shape==='square') s.borderRadius='3px'; else if(shape==='quarter'){ s.clipPath='circle(99% at 100% 100%)'; s.borderRadius='3px'; } else if(shape==='half'){ s.borderRadius='999px 999px 0 0'; s.height=(size*0.62)+'px'; } else if(shape==='stadium'){ s.borderRadius='999px'; s.height=(size*0.58)+'px'; } else if(shape==='corner'){ const mk='radial-gradient(circle '+size+'px at 0% 100%, transparent 0 '+(size*0.5)+'px, #000 '+(size*0.5)+'px '+size+'px, transparent '+size+'px)'; s.WebkitMaskImage=mk; s.maskImage=mk; s.borderRadius='3px'; } return s; }
+
+  plateStyle(){ const cell=this.CELL,n=this.state.studs,z=this.state.zoom,plate=this.colorHex(this.state.plateColor); return { position:'relative', width:(n*cell*z)+'px', height:(n*cell*z)+'px', flex:'none', backgroundColor:plate, borderRadius:'8px', overflow:'visible', boxShadow:'inset 0 1px 0 rgba(255,255,255,.7), 0 18px 50px -18px rgba(20,24,40,.45), 0 0 0 6px #fff, 0 0 0 7px #E9EAEB', cursor: this.state.dragging?'grabbing':(this.state.tool==='place'?'crosshair':(this.state.tool==='eraser'?'cell':'default')) }; }
+  tilesLayerStyle(){ const cell=this.CELL,n=this.state.studs,z=this.state.zoom,plate=this.colorHex(this.state.plateColor); const layers=[]; if(this.state.showStuds) layers.push(`radial-gradient(circle at 50% 44%, ${this.shade(plate,0.16)} 0 14%, ${this.shade(plate,-0.04)} 15% 29%, rgba(0,0,0,.10) 30% 34%, rgba(0,0,0,0) 35%)`); if(this.state.showGrid) layers.push('linear-gradient(rgba(0,0,0,.06) 1px, transparent 1px)','linear-gradient(90deg, rgba(0,0,0,.06) 1px, transparent 1px)'); return { position:'absolute', top:0, left:0, width:(n*cell)+'px', height:(n*cell)+'px', backgroundColor:plate, backgroundImage:layers.length?layers.join(', '):'none', backgroundSize:`${cell}px ${cell}px`, borderRadius:(8/z)+'px', transform:`scale(${z})`, transformOrigin:'top left' }; }
+
+  buildLayerRows(){
+    const st=this.state, SEL='#2D7FF9', sel=this.selTile(), selSet=new Set(st.selIds);
+    const rows=[]; const indent=(d)=>({width:(d*16)+'px',flex:'none'});
+    const baseRow=(active,contains)=>({display:'flex',alignItems:'center',gap:'3px',height:'32px',padding:'0 4px',borderRadius:'8px',cursor:'pointer', background: active?'#EAF2FF':(contains?'#F6F9FF':'transparent'), boxShadow: active?`inset 2px 0 0 ${SEL}`:'none'});
+    const nameStyle=(active,bold)=>({flex:1,fontSize:'12.5px',fontWeight:active?600:(bold?600:500),color:active?'#0B4FBF':(bold?'#181D27':'#414651'),whiteSpace:'nowrap',overflow:'hidden',textOverflow:'ellipsis'});
+    const noop=(e)=>e&&e.stopPropagation&&e.stopPropagation();
+    rows.push({id:'plate',rowStyle:baseRow(false,false),indentStyle:indent(0),hasChildren:false,noCaret:true,glyphFolder:false,glyphPlate:true,glyphChip:false,name:'Baseplate',nameStyle:{flex:1,fontSize:'12.5px',fontWeight:500,color:'#535862'},showCount:false,count:'',showActions:true,hidden:false,visible:true,locked:true,unlocked:false,onSelect:()=>this.setState({selIds:[],selGroup:null,ctxOpen:false}),toggleEye:noop,toggleLock:noop,toggleExpand:noop,caretStyle:{}});
+    rows.push({id:'tiles',rowStyle:baseRow(false,false),indentStyle:indent(0),hasChildren:true,noCaret:false,glyphFolder:true,glyphPlate:false,glyphChip:false,name:'Tiles',nameStyle:{flex:1,fontSize:'12.5px',fontWeight:600,color:'#181D27'},showCount:st.tiles.length>0,count:st.tiles.length,showActions:false,hidden:false,visible:true,locked:false,unlocked:true,onSelect:()=>this.toggleExpand('tiles'),toggleEye:noop,toggleLock:noop,toggleExpand:(e)=>{noop(e);this.toggleExpand('tiles');},caretStyle:{transform:st.expanded.tiles?'rotate(90deg)':'rotate(0deg)',transition:'transform .12s'}});
+    if(st.expanded.tiles){
+      for(const g of st.groups){
+        const gt=st.tiles.filter(t=>t.group===g.id); const active=st.selGroup===g.id; const contains=sel&&sel.group===g.id;
+        const anyVis=gt.some(t=>!t.hidden); const anyLock=gt.length>0&&gt.every(t=>t.locked); const dom=gt[0]?this.colorHex(gt[0].color):'#ccc';
+        rows.push({id:g.id,rowStyle:baseRow(active,contains),indentStyle:indent(1),hasChildren:true,noCaret:false,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'15px',height:'15px',borderRadius:'4px',flex:'none',background:dom,boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:g.name,nameStyle:nameStyle(active,false),showCount:true,count:gt.length,showActions:true,hidden:!anyVis,visible:anyVis,locked:anyLock,unlocked:!anyLock,onSelect:()=>this.selectGroup(g.id),toggleEye:(e)=>{noop(e);this.toggleGroupVis(g.id);},toggleLock:(e)=>{noop(e);this.toggleGroupLock(g.id);},toggleExpand:(e)=>{noop(e);this.toggleExpand(g.id);},caretStyle:{transform:st.expanded[g.id]?'rotate(90deg)':'rotate(0deg)',transition:'transform .12s'}});
+        if(st.expanded[g.id]) for(const t of gt.slice(0,8)){ const a=selSet.has(t.id); const p=this.PARTS[t.part];
+          rows.push({id:t.id,rowStyle:baseRow(a,false),indentStyle:indent(2),hasChildren:false,noCaret:true,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'14px',height:'14px',flex:'none',background:this.colorHex(t.color),...(p.shape==='round'?{borderRadius:'50%'}:p.shape==='quarter'?{clipPath:'circle(99% at 100% 100%)',borderRadius:'3px'}:{borderRadius:'3px'}),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:p.label,nameStyle:{flex:1,fontSize:'12px',fontWeight:a?600:400,color:a?'#0B4FBF':'#717680'},showCount:false,count:'',showActions:true,hidden:t.hidden,visible:!t.hidden,locked:t.locked,unlocked:!t.locked,onSelect:()=>this.setState({selIds:[t.id],selGroup:null,ctxOpen:false}),toggleEye:(e)=>{noop(e);this.updTile(t.id,{hidden:!t.hidden});},toggleLock:(e)=>{noop(e);this.updTile(t.id,{locked:!t.locked});},toggleExpand:noop,caretStyle:{}}); }
+      }
+      for(const t of st.tiles.filter(t=>!t.group)){ const a=selSet.has(t.id); const p=this.PARTS[t.part];
+        rows.push({id:t.id,rowStyle:baseRow(a,false),indentStyle:indent(1),hasChildren:false,noCaret:true,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'14px',height:'14px',flex:'none',background:this.colorHex(t.color),...(p.shape==='round'?{borderRadius:'50%'}:p.shape==='quarter'?{clipPath:'circle(99% at 100% 100%)',borderRadius:'3px'}:{borderRadius:'3px'}),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:p.label,nameStyle:{flex:1,fontSize:'12px',fontWeight:a?600:400,color:a?'#0B4FBF':'#717680'},showCount:false,count:'',showActions:true,hidden:t.hidden,visible:!t.hidden,locked:t.locked,unlocked:!t.locked,onSelect:()=>this.setState({selIds:[t.id],selGroup:null,ctxOpen:false}),toggleEye:(e)=>{noop(e);this.updTile(t.id,{hidden:!t.hidden});},toggleLock:(e)=>{noop(e);this.updTile(t.id,{locked:!t.locked});},toggleExpand:noop,caretStyle:{}}); }
+    }
+    return rows;
+  }
+
+  renderVals(){
+    const st=this.state, cell=this.CELL, sel=this.selTile(), head=this.head(), selType=this.selType();
+    const SEL='#2D7FF9', z=st.zoom, u=cell*z;
+    const list=this.selList();
+
+    // selection visuals
+    const showSel = list.length>0 && !st.selGroup;
+    const selOutlines = list.map(t=>{ const f=this.footprint(t); const L=t.x*u,T=t.y*u,W=f.w*u,H=f.h*u; return {style:{position:'absolute',left:(L-1.5)+'px',top:(T-1.5)+'px',width:(W+3)+'px',height:(H+3)+'px',border:`1.5px solid ${SEL}`,borderRadius:'4px',pointerEvents:'none',zIndex:30}}; });
+    let bx0=0,by0=0,bx1=0,by1=0;
+    if(list.length){ bx0=Infinity;by0=Infinity;bx1=-Infinity;by1=-Infinity; for(const t of list){ const f=this.footprint(t); bx0=Math.min(bx0,t.x*u); by0=Math.min(by0,t.y*u); bx1=Math.max(bx1,(t.x+f.w)*u); by1=Math.max(by1,(t.y+f.h)*u); } }
+    const showBox = list.length>1;
+    const selBoxStyle = showBox ? {position:'absolute',left:(bx0-4)+'px',top:(by0-4)+'px',width:(bx1-bx0+8)+'px',height:(by1-by0+8)+'px',border:`1.5px dashed ${SEL}`,borderRadius:'5px',boxShadow:`0 0 0 4px ${SEL}1A`,pointerEvents:'none',zIndex:29} : {};
+    const showHandles = list.length===1;
+    let handleNW={},handleNE={},handleSW={},handleSE={},rotStemStyle={},rotHandleStyle={};
+    if(showHandles){ const hb={position:'absolute',width:'9px',height:'9px',background:'#fff',border:`1.5px solid ${SEL}`,borderRadius:'2px',pointerEvents:'none',zIndex:31}; handleNW={...hb,left:(bx0-6)+'px',top:(by0-6)+'px'}; handleNE={...hb,left:(bx1-3)+'px',top:(by0-6)+'px'}; handleSW={...hb,left:(bx0-6)+'px',top:(by1-3)+'px'}; handleSE={...hb,left:(bx1-3)+'px',top:(by1-3)+'px'}; const rcx=(bx0+bx1)/2; rotStemStyle={position:'absolute',left:(rcx-0.75)+'px',top:(by0-20)+'px',width:'1.5px',height:'20px',background:SEL,pointerEvents:'none',zIndex:31}; rotHandleStyle={position:'absolute',left:(rcx-11)+'px',top:(by0-31)+'px',width:'22px',height:'22px',borderRadius:'50%',background:'#fff',border:`1.5px solid ${SEL}`,display:'grid',placeItems:'center',color:SEL,cursor:'grab',boxShadow:'0 2px 6px rgba(16,24,40,.2)',pointerEvents:'auto',zIndex:32}; }
+    // toolbar anchored above bounding box
+    let toolbarStyle={}, tbColorDot={}, tbPartGlyph={}, selPartShort='';
+    if(showSel){ const gap=showHandles?32:0; const above=by0>92; const cx=(bx0+bx1)/2; toolbarStyle={position:'absolute',left:cx+'px', top: above?(by0-10-gap)+'px':(by1+10+gap)+'px', transform: above?'translate(-50%,-100%)':'translate(-50%,0)', display:'flex',alignItems:'center',gap:'2px',background:'#23262C',borderRadius:'11px',padding:'4px',boxShadow:'0 10px 28px rgba(0,0,0,.34)',zIndex:40,pointerEvents:'auto'}; tbColorDot={width:'18px',height:'18px',borderRadius:'50%',background:head?this.colorHex(head.color):'#888',boxShadow:'inset 0 0 0 1.5px rgba(255,255,255,.25)'}; if(head){ const sp=this.PARTS[head.part]; tbPartGlyph=this.miniShape(sp.shape,15,'#C9CDD6'); selPartShort=sp.label; } }
+
+    // marquee
+    const m=st.marquee; const showMarquee=!!m;
+    const marqueeStyle = m ? {position:'absolute',left:Math.min(m.x0,m.x1)+'px',top:Math.min(m.y0,m.y1)+'px',width:Math.abs(m.x1-m.x0)+'px',height:Math.abs(m.y1-m.y0)+'px',background:`${SEL}18`,border:`1px solid ${SEL}`,borderRadius:'2px',pointerEvents:'none',zIndex:35} : {};
+
+    // context menu
+    let ctxStyle={}; { const cl=Math.max(4,Math.min(st.ctxX*z, (st.studs*u)-184)); const ct=Math.max(4,Math.min(st.ctxY*z, st.studs*u-330)); ctxStyle={position:'absolute',left:cl+'px',top:ct+'px',background:'#fff',borderRadius:'10px',padding:'5px',boxShadow:'0 12px 32px rgba(16,24,40,.22),0 0 0 1px rgba(16,24,40,.06)',minWidth:'176px',zIndex:60,pointerEvents:'auto'}; }
+    const ci=(label,hint,fn)=>({isItem:true,divider:false,label,hint,onClick:(e)=>{e.stopPropagation();fn&&fn();},rowStyle:{width:'100%',display:'flex',alignItems:'center',padding:'7px 10px',borderRadius:'7px',fontSize:'12.5px',fontWeight:500,color:'#414651'}});
+    const dv={divider:true,isItem:false};
+    const multi=st.selIds.length>1;
+    const ctxItems=[ ci('Duplicate','⌘D',()=>{this.dupSel();}), multi?ci('Group','⌘G',()=>{this.groupSel();}):ci('Copy','⌘C',()=>{this.setState({ctxOpen:false});}), dv, ci('Bring forward','',()=>{const ids=new Set(st.selIds); const keep=st.tiles.filter(t=>!ids.has(t.id)); const move=st.tiles.filter(t=>ids.has(t.id)); this.setState({tiles:[...keep,...move],ctxOpen:false});}), ci('Send backward','',()=>{const ids=new Set(st.selIds); const keep=st.tiles.filter(t=>!ids.has(t.id)); const move=st.tiles.filter(t=>ids.has(t.id)); this.setState({tiles:[...move,...keep],ctxOpen:false});}), dv, ci('Lock','',()=>{this.mapSel(()=>({locked:true}));this.setState({ctxOpen:false});}), ci('Hide','',()=>{this.mapSel(()=>({hidden:true}));this.setState({ctxOpen:false,selIds:[]});}), dv, ci(multi?'Delete tiles':'Delete','⌫',()=>{this.delSel();}) ];
+
+    // properties — chips
+    const mkSwatch=(active,onPick,name,hex,sz)=>({name,onPick:(e)=>{e&&e.stopPropagation&&e.stopPropagation();onPick();},style:{width:'100%',aspectRatio:'1',borderRadius:sz||'8px',background:hex,cursor:'pointer',boxShadow: active?`0 0 0 2px #fff,0 0 0 4px ${SEL}`:'inset 0 0 0 1px rgba(0,0,0,.1)'}});
+    const colorChips=this.COLORS.map(c=>mkSwatch(head&&head.color===c.id,()=>this.setColorSel(c.id),c.name,c.hex));
+    const swatchSel=this.COLORS.map(c=>({name:c.name,onPick:(e)=>{e.stopPropagation();this.setColorSel(c.id);},style:{width:'30px',height:'30px',borderRadius:'8px',background:c.hex,cursor:'pointer',boxShadow:(head&&head.color===c.id)?'0 0 0 2px #23262C,0 0 0 4px #fff':'inset 0 0 0 1px rgba(255,255,255,.12)'}}));
+    const barSwatches=this.COLORS.map(c=>({name:c.name,onPick:(e)=>{e.stopPropagation();this.setColorSel(c.id);},style:{width:'30px',height:'30px',borderRadius:'8px',background:c.hex,cursor:'pointer',boxShadow:(st.placeColor===c.id)?'0 0 0 2px #23262C,0 0 0 4px #fff':'inset 0 0 0 1px rgba(255,255,255,.12)'}}));
+    const partChips=Object.keys(this.PARTS).map(k=>{const p=this.PARTS[k]; const a=head&&head.part===k; return {label:p.label,onPick:(e)=>{e.stopPropagation();this.swapPartSel(k);},glyphStyle:this.miniShape(p.shape,18,a?'#2D7FF9':'#A4A7AE'),chipStyle:{display:'flex',alignItems:'center',gap:'7px',height:'40px',padding:'0 10px',borderRadius:'9px',border:`1px solid ${a?'#2D7FF9':'#E9EAEB'}`,background:a?'#F6F9FF':'#fff',color:a?'#0B4FBF':'#414651',cursor:'pointer'}};});
+    const swapList=Object.keys(this.PARTS).map(k=>{const p=this.PARTS[k]; const cur=head&&head.part===k; return {label:p.label,key:p.key,current:cur,onPick:(e)=>{e.stopPropagation();this.swapPartSel(k);},glyphStyle:this.miniShape(p.shape,16,'#C9CDD6'),rowStyle:{width:'100%',display:'flex',alignItems:'center',gap:'9px',height:'34px',padding:'0 8px',borderRadius:'8px',background:cur?'rgba(45,127,249,.14)':'transparent',cursor:'pointer'}};});
+    const barParts=Object.keys(this.PARTS).map(k=>{const p=this.PARTS[k]; const cur=st.placePart===k; return {label:p.label,key:p.key,current:cur,onPick:(e)=>{e.stopPropagation();this.swapPartSel(k);},glyphStyle:this.miniShape(p.shape,16,'#C9CDD6'),rowStyle:{width:'100%',display:'flex',alignItems:'center',gap:'9px',height:'34px',padding:'0 8px',borderRadius:'8px',background:cur?'rgba(45,127,249,.14)':'transparent',cursor:'pointer'}};});
+    const rotChips=[0,90,180,270].map(d=>({label:d+'°',onPick:(e)=>{e.stopPropagation();this.setRotSel(d);},style:this.segBtn(head&&head.rot===d)}));
+    const layerPick=[...st.groups,{id:null,name:'Loose tiles'}].map(g=>({name:g.name,current: sel && (sel.group===g.id),onPick:(e)=>{e.stopPropagation();this.setLayerSel(g.id);},chip:{width:'12px',height:'12px',borderRadius:'4px',flex:'none',background: g.id?this.colorHex((st.tiles.find(t=>t.group===g.id)||{}).color||'gray'):'#E9EAEB',boxShadow:'inset 0 0 0 1px rgba(0,0,0,.1)'},style:{display:'flex',alignItems:'center',gap:'9px',height:'34px',padding:'0 10px',borderRadius:'8px',border:`1px solid ${sel&&sel.group===g.id?'#2D7FF9':'#E9EAEB'}`,background:sel&&sel.group===g.id?'#F6F9FF':'#fff',fontSize:'12.5px',fontWeight:500,color:'#414651',cursor:'pointer'}}));
+
+    // group props
+    const gtiles=st.selGroup?st.tiles.filter(t=>t.group===st.selGroup):[];
+    const gName=(st.groups.find(g=>g.id===st.selGroup)||{name:''}).name;
+    const replFromChips=this.COLORS.map(c=>({onPick:(e)=>{e.stopPropagation();this.setState({replaceFrom:c.id});},style:{width:'100%',aspectRatio:'1',borderRadius:'7px',background:c.hex,cursor:'pointer',boxShadow:st.replaceFrom===c.id?`0 0 0 2px #fff,0 0 0 4px ${SEL}`:'inset 0 0 0 1px rgba(0,0,0,.1)'}}));
+    const replToChips=this.COLORS.map(c=>({onPick:(e)=>{e.stopPropagation();this.setState({replaceTo:c.id});},style:{width:'100%',aspectRatio:'1',borderRadius:'7px',background:c.hex,cursor:'pointer',boxShadow:st.replaceTo===c.id?`0 0 0 2px #fff,0 0 0 4px #17B26A`:'inset 0 0 0 1px rgba(0,0,0,.1)'}}));
+
+    // doc props
+    // doc / baseplate props
+    const sizeChip=(active)=>({display:'flex',alignItems:'center',justifyContent:'center',height:'34px',borderRadius:'8px',border:`1px solid ${active?'#2D7FF9':'#E9EAEB'}`,background:active?'#F6F9FF':'#fff',color:active?'#0B4FBF':'#414651',fontSize:'12.5px',fontWeight:600,cursor:'pointer'});
+    const sizePresets=[8,16,24,32,48].map(nn=>({label:nn+'×'+nn, onPick:(e)=>{e&&e.stopPropagation&&e.stopPropagation();this.setSize(nn);}, style:sizeChip(st.studs===nn)}));
+    const swatchDefs=[...this.COLORS.map(c=>({val:c.id,hex:c.hex,name:c.name,custom:false})), ...(st.customColors||[]).map(c=>({val:c.hex,hex:c.hex,name:c.name||'Custom color',custom:true}))];
+    const plateChips=swatchDefs.map(c=>({name:c.name, custom:c.custom, onPick:(e)=>{e.stopPropagation();this.setPlate(c.val);}, onRemove:(e)=>{e.stopPropagation();this.removeCustomColor(c.hex);}, style:{width:'100%',aspectRatio:'1',borderRadius:'8px',background:c.hex,cursor:'pointer',boxShadow:st.plateColor===c.val?`0 0 0 2px #fff,0 0 0 4px ${SEL}`:'inset 0 0 0 1px rgba(0,0,0,.12)'}}));
+    const pickerValue=(st.pickerHex&&st.pickerHex[0]==='#')?st.pickerHex:this.colorHex(st.plateColor);
+    const pickerSwatchStyle={position:'relative',width:'34px',height:'34px',borderRadius:'8px',border:'1px solid #D5D7DA',overflow:'hidden',flex:'none',cursor:'pointer',display:'grid',placeItems:'center',background:pickerValue,color:'#fff'};
+    const templateRows=(st.templates||[]).map(t=>({name:t.name, meta:(t.doc.studs+'×'+t.doc.studs+' · '+((t.doc.tiles||[]).length)+' tiles'), swatch:{width:'26px',height:'26px',borderRadius:'7px',flex:'none',background:this.colorHex(t.doc.plateColor),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.1)'}, onApply:(e)=>{e&&e.stopPropagation&&e.stopPropagation();this.applyTemplate(t.id);}, onDelete:(e)=>{e.stopPropagation();this.deleteTemplate(t.id);}}));
+    const toggleOn=(on)=>({width:'38px',height:'22px',borderRadius:'11px',background:on?SEL:'#D5D7DA',position:'relative',transition:'background .15s',flex:'none'});
+    const toggleKnob=(on)=>({position:'absolute',top:'2px',left:on?'18px':'2px',width:'18px',height:'18px',borderRadius:'50%',background:'#fff',transition:'left .15s',boxShadow:'0 1px 2px rgba(0,0,0,.2)'});
+
+    // export
+    const bomData=this.bom();
+    const bomRows=bomData.map((b,i)=>({...b,rowStyle:{display:'grid',gridTemplateColumns:'1fr 92px 56px',padding:'9px 14px',borderBottom: i<bomData.length-1?'1px solid #F5F5F5':'none'},swatch:{width:'26px',height:'26px',borderRadius:'6px',flex:'none',background:b.hex,boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'}}));
+    const buildSteps = bomData.length ? [{n:1,t:`Snap together the ${st.studs}×${st.studs} studded baseplate.`}].concat(bomData.slice(0,7).map((x,i)=>({n:i+2,t:`Place ${x.count}× ${x.partName} in ${x.colorName}.`}))) : [{n:1,t:`Snap together the ${st.studs}×${st.studs} studded baseplate.`},{n:2,t:`Your mosaic is empty — place tiles to generate a step-by-step guide.`}];
+    const exTab=(id,label,icon)=>({label,icon,color:st.exportTab===id?'#2D7FF9':'#717680',onPick:(e)=>{e.stopPropagation();this.setExportTab(id);},style:{display:'flex',alignItems:'center',gap:'10px',height:'40px',padding:'0 10px',borderRadius:'9px',marginBottom:'2px',fontSize:'13px',fontWeight:600,cursor:'pointer',background:st.exportTab===id?'#EAF2FF':'transparent',color:st.exportTab===id?'#0B4FBF':'#535862'}});
+    const exportTabs=[ exTab('png','PNG render','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>'), exTab('bom','Parts list','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>'), exTab('build','Build guide','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4zM4 14h16v6H4z"/></svg>'), exTab('project','Project file','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5"/></svg>') ];
+    const exportPreviewStyle={width:'260px',height:'260px',borderRadius:'8px',background:this.colorHex(st.plateColor),backgroundImage:`radial-gradient(circle at 50% 46%, rgba(255,255,255,.9) 0 16%, ${this.shade(this.colorHex(st.plateColor),-0.05)} 17% 30%, rgba(0,0,0,.06) 31% 35%, transparent 36%)`,backgroundSize:`${260/st.studs}px ${260/st.studs}px`,boxShadow:'0 0 0 5px #fff,0 0 0 6px #E9EAEB,0 12px 30px -10px rgba(0,0,0,.3)'};
+
+    // prop header
+    let propIconStyle={width:'20px',height:'20px',borderRadius:'5px'}, propTitle='Baseplate', propSub=st.studs+'×'+st.studs;
+    if(selType==='tile'){ propIconStyle={...this.miniShape(this.PARTS[sel.part].shape,18,this.colorHex(sel.color)),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.1)'}; propTitle=this.PARTS[sel.part].label+' tile'; propSub='Tile'; }
+    else if(selType==='multi'){ propIconStyle={width:'18px',height:'18px',borderRadius:'5px',background:'#EAF2FF',boxShadow:'inset 0 0 0 1px #B2CCF5'}; propTitle='Multiple'; propSub=st.selIds.length+' selected'; }
+    else if(selType==='group'){ propIconStyle={width:'18px',height:'18px',borderRadius:'5px',background: gtiles[0]?this.colorHex(gtiles[0].color):'#ccc',boxShadow:'inset 0 0 0 1px rgba(0,0,0,.1)'}; propTitle=gName; propSub='Group'; }
+    else { propIconStyle={width:'20px',height:'20px',borderRadius:'5px',background:this.colorHex(st.plateColor),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.12)'}; }
+
+    const emptyHintStyle={position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',display:'flex',flexDirection:'column',alignItems:'center',gap:'12px',textAlign:'center',color:'#A4A7AE',fontSize:'13px',fontWeight:500,lineHeight:1.5,pointerEvents:'none',width:'230px',zIndex:4,textWrap:'pretty'};
+
+    const projectCards=(this._projects||[]).map(p=>{ const d=p.doc||{}; const tn=(d.tiles||[]).length; if(!p.thumb) p.thumb=this.renderThumb(d); return { id:p.id, name:p.name||'Untitled mosaic', meta:(d.studs||16)+'×'+(d.studs||16)+' · '+tn+(tn===1?' tile':' tiles'), updated:'Edited '+this.relTime(p.updatedAt), thumb:p.thumb, plateBg:this.colorHex(d.plateColor), renaming:st.renamingId===p.id, notRenaming:st.renamingId!==p.id, onOpen:()=>this.openProject(p.id), onRename:(e)=>{e.stopPropagation();this.startRename(p.id,p.name);}, onDup:(e)=>{e.stopPropagation();this.duplicateProject(p.id);}, onDelete:(e)=>{e.stopPropagation();this.deleteProject(p.id);} }; });
+
+    return {
+      plateLabel:st.studs+'×'+st.studs+' studs', openExport:this.openExport,
+      // gallery
+      inGallery:st.view==='gallery', projectCount:(this._projects||[]).length+((this._projects||[]).length===1?' project':' projects'), projectCards, createProject:this.createProject, backToGallery:this.backToGallery,
+      renameVal:st.renameVal, onRenameInput:this.onRenameInput, commitRename:this.commitRename, onRenameKey:this.onRenameKey,
+      // title
+      projTitle:st.projTitle, editingTitle:st.editingTitle, notEditingTitle:!st.editingTitle, startEditTitle:this.startEditTitle, onTitleInput:this.onTitleInput, commitTitle:this.commitTitle, onTitleKey:this.onTitleKey,
+      // panels
+      leftOpen:st.leftOpen, leftClosed:!st.leftOpen, rightOpen:st.rightOpen, rightClosed:!st.rightOpen,
+      collapseLeft:this.collapseLeft, expandLeft:this.expandLeft, collapseRight:this.collapseRight, expandRight:this.expandRight,
+      // layers
+      layerRows:this.buildLayerRows(), groupSel:this.groupSel, ungroupSel:this.ungroupSel,
+      // canvas
+      canvasRef:this.canvasRef, plateRef:this.plateRef, onPlateDown:this.onPlateDown, onPlateCtx:this.onPlateCtx, onCanvasBgDown:this.onCanvasBgDown, stop:this.stop,
+      plateStyle:this.plateStyle(), tilesLayerStyle:this.tilesLayerStyle(), tiles:st.tiles.map(t=>({id:t.id,style:this.tileStyle(t)})),
+      showEmpty:st.tiles.length===0, emptyHintStyle,
+      showMarquee, marqueeStyle,
+      showSel, selOutlines, showBox, selBoxStyle, showHandles, handleNW, handleNE, handleSW, handleSE, rotStemStyle, rotHandleStyle, onRotateDown:this.onRotateDown,
+      toolbarStyle, tbColorDot, tbPartGlyph, selPartShort, showSingle:list.length===1, showMultiSel:list.length>1,
+      toggleColorPop:this.toggleColorPop, toggleSwap:this.toggleSwap, colorPopOpen:st.colorPopOpen, swapOpen:st.swapOpen, swatchSel, swapList,
+      rotateSel:this.rotateSel, dupSel:this.dupSel, delSel:this.delSel,
+      ctxOpen:st.ctxOpen, ctxStyle, ctxItems,
+      // bottom bar
+      btnSelect:this.toolBtn(st.tool==='select'), btnPlace:this.toolBtn(st.tool==='place'), btnEraser:this.toolBtn(st.tool==='eraser'),
+      pickSelect:this.pickSelect, pickPlace:this.pickPlace, pickEraser:this.pickEraser,
+      toggleBarColor:this.toggleBarColor, barColorOpen:st.barColorOpen, barColorDot:{width:'18px',height:'18px',borderRadius:'50%',background:this.colorHex(st.placeColor),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.15)'}, barSwatches,
+      toggleBarPart:this.toggleBarPart, barPartOpen:st.barPartOpen, barPartGlyph:this.miniShape(this.PARTS[st.placePart].shape,16,'#717680'), barPartLabel:this.PARTS[st.placePart].label, barParts,
+      zoomPct:Math.round(st.zoom*100)+'%', zoomIn:this.zoomIn, zoomOut:this.zoomOut, zoomFit:this.zoomFit,
+      // properties
+      isTileSel:selType==='tile', isMultiSel:selType==='multi', isGroupSel:selType==='group', isDocSel:selType==='document',
+      propIconStyle, propTitle, propSub,
+      partChips, colorChips, rotChips, layerPick,
+      flipH:this.flipH, flipV:this.flipV,
+      selX:sel?sel.x:0, selY:sel?sel.y:0, incX:()=>this.moveSel(1,0), decX:()=>this.moveSel(-1,0), incY:()=>this.moveSel(0,1), decY:()=>this.moveSel(0,-1),
+      multiCount:st.selIds.length, multiColors:[...new Set(list.map(t=>t.color))].length,
+      groupName:gName, groupCount:gtiles.length, groupColors:[...new Set(gtiles.map(t=>t.color))].length,
+      rotateGroup:this.rotateGroup, replFromChips, replToChips, applyReplace:this.applyReplace,
+      size16:this.size16, size32:this.size32, size16Style:this.segBtn(st.studs===16), size32Style:this.segBtn(st.studs===32),
+      sizePresets, applyCustomSize:this.applyCustomSize, onCustomSize:(e)=>this.setState({customSize:e.target.value}), onCustomSizeKey:(e)=>{ if(e.key==='Enter'){ e.preventDefault(); this.applyCustomSize(); } },
+      pickerValue, pickerSwatchStyle, onPlateHexFocus:this.onPlateHexFocus, onPlateHexInput:this.onPlateHexInput, onPlateHexChange:this.onPlateHexChange, saveCustomColor:this.saveCustomColor,
+      newTemplateName:st.newTemplateName, onTemplateName:(e)=>this.setState({newTemplateName:e.target.value}), saveTemplate:this.saveTemplate, templateRows, hasTemplates:(st.templates||[]).length>0, noTemplates:(st.templates||[]).length===0,
+      plateChips, toggleStuds:this.toggleStuds, toggleGrid:this.toggleGrid,
+      studsToggle:toggleOn(st.showStuds), studsKnob:toggleKnob(st.showStuds), gridToggle:toggleOn(st.showGrid), gridKnob:toggleKnob(st.showGrid),
+      // export
+      exportOpen:st.exportOpen, closeExport:this.closeExport, exportTabs, totalTiles:st.tiles.length, bomCount:bomData.length, layerCount:st.groups.length,
+      tabPng:st.exportTab==='png', tabBom:st.exportTab==='bom', tabBuild:st.exportTab==='build', tabProject:st.exportTab==='project',
+      hasBom:bomData.length>0, noBom:bomData.length===0,
+      exportPreviewStyle, exportRes:(st.studs*64)+'×'+(st.studs*64)+'px', doExportPNG:this.doExportPNG, doExportCSV:this.doExportCSV, doExportJSON:this.doExportJSON, newDoc:this.newDoc, openProjectFile:this.openProjectFile,
+      bomRows, buildSteps,
+    };
+  }
+}
+</script>
 </body>
 </html>
