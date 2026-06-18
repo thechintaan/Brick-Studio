@@ -97,6 +97,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
             <span style="{{ r.nameStyle }}">{{ r.name }}</span>
             <sc-if value="{{ r.showCount }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;color:#A4A7AE;font-weight:500;flex:none;margin-right:2px;">{{ r.count }}</span></sc-if>
             <sc-if value="{{ r.showActions }}" hint-placeholder-val="{{ true }}">
+              <sc-if value="{{ r.groupActions }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ r.onDuplicate }}" title="Duplicate group (⌘D)" style="width:24px;height:24px;border-radius:6px;display:grid;place-items:center;flex:none;color:#A4A7AE;" style-hover="background:#EFEFEF;color:#414651;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M4 16a2 2 0 01-2-2V4a2 2 0 012-2h10a2 2 0 012 2"/></svg></button>
+              </sc-if>
               <button onClick="{{ r.toggleEye }}" style="width:24px;height:24px;border-radius:6px;display:grid;place-items:center;flex:none;color:#A4A7AE;">
                 <sc-if value="{{ r.hidden }}" hint-placeholder-val="{{ false }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3l18 18"/><path d="M10.6 5.1A9 9 0 0121 12a17 17 0 01-2.2 2.9M6.5 6.6A17 17 0 003 12a9 9 0 0011.5 5.2"/></svg></sc-if>
                 <sc-if value="{{ r.visible }}" hint-placeholder-val="{{ true }}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="2.6"/></svg></sc-if>
@@ -173,6 +176,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
                 <sc-if value="{{ colorPopOpen }}" hint-placeholder-val="{{ false }}">
                   <div onMouseDown="{{ stop }}" style="position:absolute;top:40px;left:0;background:#23262C;border-radius:12px;padding:9px;box-shadow:0 12px 30px rgba(0,0,0,.32);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;">
                     <sc-for list="{{ swatchSel }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+                    <label title="Add custom color" style="position:relative;width:30px;height:30px;border-radius:8px;border:1.5px dashed #4A4F57;display:grid;place-items:center;cursor:pointer;color:#8A9099;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><input type="color" onChange="{{ addBrickColor }}" style="position:absolute;inset:0;opacity:0;cursor:pointer;border:0;padding:0;"></label>
                   </div>
                 </sc-if>
                 <sc-if value="{{ swapOpen }}" hint-placeholder-val="{{ false }}">
@@ -187,6 +191,18 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
                     </sc-for>
                   </div>
                 </sc-if>
+              </div>
+            </sc-if>
+
+            <!-- group selection outline + floating toolbar -->
+            <sc-if value="{{ showGroupSel }}" hint-placeholder-val="{{ false }}">
+              <div style="{{ groupBoxStyle }}"></div>
+              <div onMouseDown="{{ stop }}" style="{{ groupToolbarStyle }}">
+                <button onClick="{{ rotateGroup }}" title="Rotate group 90°" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7"/><path d="M21 3v5h-5"/></svg></button>
+                <button onClick="{{ dupSel }}" title="Duplicate group (⌘D)" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 00-2-2H6a2 2 0 00-2 2v8a2 2 0 002 2h2"/></svg></button>
+                <button onClick="{{ ungroupSel }}" title="Ungroup (⌘⇧G)" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#fff;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke-dasharray="2 2"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke-dasharray="2 2"/></svg></button>
+                <div style="width:1px;height:18px;background:rgba(255,255,255,.15);"></div>
+                <button onClick="{{ delSel }}" title="Delete group" style="width:30px;height:30px;border-radius:7px;display:grid;place-items:center;color:#FF9E94;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 011-1h4a1 1 0 011 1v2M6 7l1 13a1 1 0 001 1h8a1 1 0 001-1l1-13"/></svg></button>
               </div>
             </sc-if>
 
@@ -221,6 +237,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
           <sc-if value="{{ barColorOpen }}" hint-placeholder-val="{{ false }}">
             <div onMouseDown="{{ stop }}" style="position:absolute;bottom:44px;left:50%;transform:translateX(-50%);background:#23262C;border-radius:12px;padding:9px;box-shadow:0 12px 30px rgba(0,0,0,.34);display:grid;grid-template-columns:repeat(5,1fr);gap:6px;width:max-content;">
               <sc-for list="{{ barSwatches }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+              <label title="Add custom color" style="position:relative;width:30px;height:30px;border-radius:8px;border:1.5px dashed #4A4F57;display:grid;place-items:center;cursor:pointer;color:#8A9099;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><input type="color" onChange="{{ addBrickColor }}" style="position:absolute;inset:0;opacity:0;cursor:pointer;border:0;padding:0;"></label>
             </div>
           </sc-if>
         </div>
@@ -271,6 +288,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
           <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">COLOR</div>
           <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px;">
             <sc-for list="{{ colorChips }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+            <label title="Add custom color" style="position:relative;width:100%;aspect-ratio:1;border-radius:8px;border:1.5px dashed #D5D7DA;display:grid;place-items:center;cursor:pointer;color:#A4A7AE;" style-hover="border-color:#2D7FF9;color:#2D7FF9;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><input type="color" onChange="{{ addBrickColor }}" style="position:absolute;inset:0;opacity:0;cursor:pointer;border:0;padding:0;"></label>
           </div>
           <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">ROTATION</div>
           <div style="display:flex;background:#F5F5F5;border-radius:9px;padding:3px;gap:2px;margin-bottom:8px;">
@@ -301,6 +319,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
           <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">SET COLOR FOR ALL</div>
           <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:7px;margin-bottom:18px;">
             <sc-for list="{{ colorChips }}" as="c" hint-placeholder-count="9"><button onClick="{{ c.onPick }}" title="{{ c.name }}" style="{{ c.style }}"></button></sc-for>
+            <label title="Add custom color" style="position:relative;width:100%;aspect-ratio:1;border-radius:8px;border:1.5px dashed #D5D7DA;display:grid;place-items:center;cursor:pointer;color:#A4A7AE;" style-hover="border-color:#2D7FF9;color:#2D7FF9;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><input type="color" onChange="{{ addBrickColor }}" style="position:absolute;inset:0;opacity:0;cursor:pointer;border:0;padding:0;"></label>
           </div>
           <div style="font-size:11px;font-weight:600;color:#717680;letter-spacing:.03em;margin-bottom:8px;">ROTATION</div>
           <div style="display:flex;background:#F5F5F5;border-radius:9px;padding:3px;gap:2px;margin-bottom:18px;">
@@ -416,7 +435,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
             <sc-if value="{{ tabPng }}" hint-placeholder-val="{{ true }}">
               <div style="font-size:17px;font-weight:700;margin-bottom:4px;">PNG render</div>
               <div style="font-size:13px;color:#717680;margin-bottom:18px;">A flat top-down render of your mosaic, ready to share or print.</div>
-              <div style="background:#F4F5F7;border:1px solid #E9EAEB;border-radius:12px;padding:24px;display:grid;place-items:center;margin-bottom:18px;"><div style="{{ exportPreviewStyle }}"></div></div>
+              <div style="background:#F4F5F7;border:1px solid #E9EAEB;border-radius:12px;padding:24px;display:grid;place-items:center;margin-bottom:18px;">{{ exportPreviewEl }}</div>
               <div style="display:flex;gap:8px;align-items:center;"><button onClick="{{ doExportPNG }}" style="height:40px;padding:0 18px;border-radius:9px;background:#181D27;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Download PNG</button><span style="font-size:12px;color:#A4A7AE;">{{ exportRes }} · transparent background available</span></div>
             </sc-if>
 
@@ -445,7 +464,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
               <div style="font-size:17px;font-weight:700;margin-bottom:4px;">Project file</div>
               <div style="font-size:13px;color:#717680;margin-bottom:14px;">Export a file to back up your design or move it to another machine.</div>
               <div style="display:flex;align-items:center;gap:9px;background:#ECFDF3;border:1px solid #ABEFC6;border-radius:10px;padding:11px 13px;margin-bottom:16px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#067647" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:none;"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><span style="font-size:12.5px;color:#067647;font-weight:500;line-height:1.45;">Auto-saved in this browser — your mosaic will still be here when you reopen.</span></div>
-              <div style="border:1px solid #E9EAEB;border-radius:12px;padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;"><div style="width:46px;height:46px;border-radius:10px;background:#2D7FF9;display:grid;place-items:center;color:#fff;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4a1 1 0 011-1h9l4 4v13a1 1 0 01-1 1H6a1 1 0 01-1-1z"/><path d="M14 3v5h5"/></svg></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:600;">untitled-mosaic.brickwork</div><div style="font-size:12px;color:#A4A7AE;">Editable project · {{ totalTiles }} tiles, {{ layerCount }} groups</div></div></div>
+              <div style="border:1px solid #E9EAEB;border-radius:12px;padding:18px;display:flex;align-items:center;gap:14px;margin-bottom:14px;"><div style="width:46px;height:46px;border-radius:10px;background:#2D7FF9;display:grid;place-items:center;color:#fff;flex:none;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4a1 1 0 011-1h9l4 4v13a1 1 0 01-1 1H6a1 1 0 01-1-1z"/><path d="M14 3v5h5"/></svg></div><div style="flex:1;"><div style="font-size:13.5px;font-weight:600;">{{ exportFileName }}</div><div style="font-size:12px;color:#A4A7AE;">Editable project · {{ totalTiles }} tiles, {{ layerCount }} groups</div></div></div>
               <div style="display:flex;gap:8px;flex-wrap:wrap;">
                 <button onClick="{{ doExportJSON }}" style="height:40px;padding:0 18px;border-radius:9px;background:#181D27;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>Save project file</button>
                 <label style="height:40px;padding:0 16px;border-radius:9px;border:1px solid #D5D7DA;background:#fff;color:#414651;font-size:13px;font-weight:600;display:flex;align-items:center;gap:8px;cursor:pointer;"><input type="file" accept=".brickwork,.json,application/json" onChange="{{ openProjectFile }}" style="display:none;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>Open project file</label>
@@ -470,6 +489,14 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
           <span style="font-weight:700;font-size:15px;letter-spacing:-.01em;">Brick Studio</span>
         </div>
         <div style="flex:1;"></div>
+        <sc-if value="{{ backupNotice }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:7px;height:34px;padding:0 13px;border-radius:8px;background:#ECFDF3;border:1px solid #ABEFC6;color:#067647;font-size:13px;font-weight:600;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>{{ backupNotice }}</div></sc-if>
+        <label title="Restore from a backup file" style="height:38px;padding:0 14px;border-radius:9px;border:1px solid #D5D7DA;background:#fff;color:#414651;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;cursor:pointer;" style-hover="background:#FAFAFA;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V9M8 13l4-4 4 4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>Restore
+          <input type="file" accept=".brick,.brickwork,.json,application/json" onChange="{{ restoreAll }}" style="display:none;">
+        </label>
+        <button onClick="{{ backupAll }}" title="Download a backup of every mosaic" style="height:38px;padding:0 14px;border-radius:9px;border:1px solid #D5D7DA;background:#fff;color:#414651;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;" style-hover="background:#FAFAFA;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M8 11l4 4 4-4"/><path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2"/></svg>Back up all
+        </button>
         <button onClick="{{ createProject }}" style="height:38px;padding:0 16px;border-radius:9px;background:#181D27;color:#fff;font-size:13px;font-weight:600;display:flex;align-items:center;gap:7px;box-shadow:0 1px 2px rgba(16,24,40,.2);">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>New project
         </button>
@@ -480,7 +507,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
             <h1 style="font-size:24px;font-weight:700;margin:0;letter-spacing:-.02em;color:#181D27;">Your mosaics</h1>
             <span style="font-size:14px;color:#A4A7AE;font-weight:500;">{{ projectCount }}</span>
           </div>
-          <p style="font-size:14px;color:#717680;margin:0 0 28px;">Pick up where you left off, or start a new build. Everything saves automatically.</p>
+          <p style="font-size:14px;color:#717680;margin:0 0 28px;">Pick up where you left off, or start a new build. Mosaics save automatically in this browser — use <strong style="color:#414651;font-weight:600;">Back up all</strong> to save a copy to your computer you can restore anytime.</p>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:20px;">
             <button onClick="{{ createProject }}" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;min-height:286px;border:2px dashed #D5D7DA;border-radius:14px;background:#fff;color:#535862;transition:border-color .15s,background .15s;" style-hover="border-color:#2D7FF9;background:#F6F9FF;">
               <div style="width:48px;height:48px;border-radius:13px;background:#EAF2FF;display:grid;place-items:center;color:#2D7FF9;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
@@ -490,7 +517,7 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
             <sc-for list="{{ projectCards }}" as="c" hint-placeholder-count="0">
               <div onClick="{{ c.onOpen }}" style="display:flex;flex-direction:column;border:1px solid #E9EAEB;border-radius:14px;background:#fff;overflow:hidden;cursor:pointer;box-shadow:0 1px 2px rgba(16,24,40,.05);transition:box-shadow .15s,border-color .15s;" style-hover="box-shadow:0 6px 20px -6px rgba(16,24,40,.18);border-color:#D5D7DA;">
                 <div style="aspect-ratio:1;background:{{ c.plateBg }};display:grid;place-items:center;border-bottom:1px solid #F0F0F0;overflow:hidden;padding:14px;">
-                  <img src="{{ c.thumb }}" alt="{{ c.name }}" style="width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 4px 10px rgba(8,18,34,.18));">
+                  {{ c.thumbEl }}
                 </div>
                 <div style="padding:13px 14px;display:flex;flex-direction:column;gap:3px;">
                   <sc-if value="{{ c.renaming }}" hint-placeholder-val="{{ false }}">
@@ -533,7 +560,7 @@ class Component extends DCLogic {
     leftOpen:true, rightOpen:true,
     marquee:null,
     customColors:[], templates:[], customSize:'', newTemplateName:'', pickerHex:'',
-    view:'gallery', projects:[], currentId:null, projTitle:'Untitled mosaic',
+    view:'gallery', projects:[], currentId:null, projTitle:'Untitled mosaic', backupNotice:'',
     editingTitle:false, renamingId:null, renameVal:'',
   };
 
@@ -593,11 +620,45 @@ class Component extends DCLogic {
   newProjId(){ return 'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
   blankDoc(){ return {tiles:[], groups:[], groupCounter:0, studs: (this.props.plateStuds==='32'?32:16), plateColor:'teal', showStuds:(this.props.showStuds!==undefined?this.props.showStuds:true), showGrid:false}; }
   renderThumb(doc){ try{ const n=doc.studs||16, S=2, px=148, cell=px/n; const cv=document.createElement('canvas'); cv.width=px*S; cv.height=px*S; const g=cv.getContext('2d'); g.scale(S,S); g.fillStyle=this.colorHex(doc.plateColor); g.fillRect(0,0,px,px); for(const t of (doc.tiles||[])){ if(t.hidden) continue; this.drawTile(g,t,cell); } return cv.toDataURL('image/png'); }catch(e){ return ''; } }
+  renderPreview(doc){ try{ const n=doc.studs||16, px=520, cell=px/n; const cv=document.createElement('canvas'); cv.width=px; cv.height=px; const g=cv.getContext('2d'); g.fillStyle=this.colorHex(doc.plateColor); g.fillRect(0,0,px,px); if(doc.showStuds){ g.fillStyle=this.shade(this.colorHex(doc.plateColor),-0.05); for(let y=0;y<n;y++)for(let x=0;x<n;x++){ g.beginPath(); g.arc(x*cell+cell/2,y*cell+cell*0.46,cell*0.18,0,7); g.fill(); } } for(const t of (doc.tiles||[])){ if(t.hidden) continue; this.drawTile(g,t,cell); } return cv.toDataURL('image/png'); }catch(e){ return ''; } }
   saveCurrent(withThumb){ const id=this.state.currentId; if(!id||!this._projects) return; const p=this._projects.find(x=>x.id===id); if(!p) return; p.doc=JSON.parse(this.serializeDoc()); p.name=this.state.projTitle||p.name; p.updatedAt=Date.now(); if(withThumb) p.thumb=this.renderThumb(p.doc); this.persist('brickwork.projects', this._projects); }
   createProject = ()=>{ const doc=this.blankDoc(); const proj={id:this.newProjId(), name:'Untitled mosaic', doc, thumb:'', updatedAt:Date.now()}; this._projects=[proj, ...this._projects]; this.persist('brickwork.projects', this._projects); this.openProject(proj.id); };
   openProject = (id)=>{ const p=(this._projects||[]).find(x=>x.id===id); if(!p) return; const d=p.doc||this.blankDoc(); this._id=(d.tiles||[]).reduce((m,t)=>Math.max(m, parseInt(String(t.id).replace(/\D/g,''),10)||0), 0); this._undo=[]; this._redo=[]; this.setState({ view:'editor', currentId:id, projTitle:p.name||'Untitled mosaic', editingTitle:false, tiles:(d.tiles||[]).map(t=>({...t})), groups:d.groups||[], groupCounter:d.groupCounter||0, studs:d.studs||16, plateColor:d.plateColor||'teal', showStuds:d.showStuds!==undefined?d.showStuds:true, showGrid:d.showGrid||false, selIds:[], selGroup:null, ctxOpen:false, exportOpen:false }, ()=>{ this._lastSaved=this.serializeDoc(); setTimeout(this.fit,80); }); };
   backToGallery = ()=>{ clearTimeout(this._thumbT); this.saveCurrent(true); this.setState({ view:'gallery', projects:this._projects.slice(), selIds:[], selGroup:null, ctxOpen:false, exportOpen:false, editingTitle:false }); };
   deleteProject = (id)=>{ this._projects=(this._projects||[]).filter(x=>x.id!==id); this.persist('brickwork.projects', this._projects); this.setState({projects:this._projects.slice()}); };
+  flashBackup(msg){ this.setState({backupNotice:msg}); clearTimeout(this._bkT); this._bkT=setTimeout(()=>this.setState({backupNotice:''}), 2600); }
+  backupAll = ()=>{
+    const data={ app:'brick-studio', kind:'library-backup', version:1, savedAt:Date.now(),
+      projects:this._projects||[], customColors:this.state.customColors||[], templates:this.state.templates||[] };
+    const d=new Date(); const stamp=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    this.download('brick-studio-backup-'+stamp+'.brick', 'application/json', JSON.stringify(data));
+    this.flashBackup('Backup downloaded');
+  };
+  restoreAll = (e)=>{
+    const f=e.target.files&&e.target.files[0]; if(!f) return; const rd=new FileReader();
+    rd.onload=()=>{ try{
+      const d=JSON.parse(rd.result);
+      // accept a full library backup, or a bare projects array, or a single-mosaic export
+      let inProjects=[], inColors=[], inTemplates=[];
+      if(d && Array.isArray(d.projects)){ inProjects=d.projects; inColors=d.customColors||[]; inTemplates=d.templates||[]; }
+      else if(Array.isArray(d)){ inProjects=d; }
+      else if(d && Array.isArray(d.tiles)){ inProjects=[{name:d.name||'Imported mosaic', doc:d, thumb:'', updatedAt:Date.now()}]; }
+      else { this.flashBackup('Unrecognized file'); return; }
+      // merge: imported projects get fresh ids and a fresh thumb, prepended
+      const merged=inProjects.map(p=>{ const doc=p.doc||p; return { id:this.newProjId(), name:p.name||'Imported mosaic', doc, thumb:p.thumb||this.renderThumb(doc), updatedAt:p.updatedAt||Date.now() }; });
+      this._projects=[...merged, ...(this._projects||[])];
+      this.persist('brickwork.projects', this._projects);
+      // merge custom colors (by hex) and templates (by name)
+      const colors=(this.state.customColors||[]).slice(); const seen=new Set(colors.map(c=>(c.hex||'').toLowerCase()));
+      for(const c of inColors){ const h=(c.hex||'').toLowerCase(); if(h && !seen.has(h)){ seen.add(h); colors.push(c); } }
+      const tpls=(this.state.templates||[]).slice(); const tn=new Set(tpls.map(t=>t.name));
+      for(const t of inTemplates){ if(t.name && !tn.has(t.name)){ tn.add(t.name); tpls.push({...t, id:'t'+Date.now()+Math.random().toString(36).slice(2,5)}); } }
+      this.persist('brickwork.customColors', colors); this.persist('brickwork.templates', tpls);
+      this.setState({projects:this._projects.slice(), customColors:colors, templates:tpls});
+      this.flashBackup('Restored '+merged.length+(merged.length===1?' mosaic':' mosaics'));
+    }catch(err){ this.flashBackup('Could not read file'); } };
+    rd.readAsText(f); e.target.value='';
+  };
   duplicateProject = (id)=>{ const p=(this._projects||[]).find(x=>x.id===id); if(!p) return; const copy={id:this.newProjId(), name:(p.name||'Mosaic')+' copy', doc:JSON.parse(JSON.stringify(p.doc||this.blankDoc())), thumb:p.thumb||'', updatedAt:Date.now()}; const i=this._projects.indexOf(p); this._projects.splice(i+1,0,copy); this.persist('brickwork.projects', this._projects); this.setState({projects:this._projects.slice()}); };
   startRename = (id,name)=>{ this.setState({renamingId:id, renameVal:name||''}); };
   commitRename = ()=>{ const id=this.state.renamingId; if(id){ const p=(this._projects||[]).find(x=>x.id===id); if(p){ p.name=(this.state.renameVal||'').trim()||p.name; p.updatedAt=Date.now(); this.persist('brickwork.projects', this._projects); } } this.setState({renamingId:null, renameVal:'', projects:this._projects.slice()}); };
@@ -682,10 +743,34 @@ class Component extends DCLogic {
     // SELECT tool
     const t = inb ? this.tileAt(cx,cy) : null;
     if(t && !t.locked){
-      const sx=e.clientX, sy=e.clientY;
-      if(e.shiftKey){ const s=new Set(this.state.selIds); s.has(t.id)?s.delete(t.id):s.add(t.id); this.setState({selIds:[...s], selGroup:null}); return; }
-      const inSel = this.state.selGroup ? (t.group===this.state.selGroup) : this.state.selIds.includes(t.id);
-      if(inSel){ this.beginDrag(sx,sy); }
+      const sx=e.clientX, sy=e.clientY; this._drillTo=null;
+      const g=t.group;
+      if(e.shiftKey){ const cur=this.state.selGroup?this.state.tiles.filter(x=>x.group===this.state.selGroup).map(x=>x.id):this.state.selIds; const s=new Set(cur); s.has(t.id)?s.delete(t.id):s.add(t.id); this.setState({selIds:[...s], selGroup:null}); return; }
+      const groupSelected = g!=null && this.state.selGroup===g;
+      const tileSelected = !this.state.selGroup && this.state.selIds.length===1 && this.state.selIds[0]===t.id;
+      // Alt+drag → duplicate the current selection (group/element) and drag the copies
+      if(e.altKey){
+        const baseSel = groupSelected ? this.state.tiles.filter(x=>x.group===g) : tileSelected ? this.selList() : (g!=null ? this.state.tiles.filter(x=>x.group===g) : [t]);
+        const movable = baseSel.filter(x=>!x.locked);
+        if(movable.length){
+          const snap=this.serializeDoc();
+          let gc=this.state.groupCounter; const gmap={};
+          const clones=movable.map(o=>{ let gg=o.group; if(gg!=null){ if(gmap[gg]==null){ gc+=1; gmap[gg]='g'+gc; } gg=gmap[gg]; } return {...o, id:this.nextId(), group:gg}; });
+          const newG = g!=null ? gmap[g] : null;
+          this.setState({tiles:[...this.state.tiles, ...clones], groupCounter:gc, selGroup:newG, selIds:newG?[]:clones.map(c=>c.id)}, ()=>this.beginDrag(sx,sy,snap,true));
+        }
+        return;
+      }
+      // Figma-style progressive selection: 1st tap = group, 2nd tap (a click) = element
+      if(g!=null && !groupSelected && !tileSelected){
+        this.setState({selGroup:g, selIds:[]}, ()=>this.beginDrag(sx,sy));
+        return;
+      }
+      if(groupSelected){
+        // group already selected → drag moves the whole group; a click (no move) drills to the element
+        this._drillTo=t.id; this.beginDrag(sx,sy); return;
+      }
+      if(tileSelected){ this.beginDrag(sx,sy); }
       else { this.setState({selIds:[t.id], selGroup:null}, ()=>this.beginDrag(sx,sy)); }
       return;
     }
@@ -709,15 +794,15 @@ class Component extends DCLogic {
   onMarqUp = ()=>{ this._marqActive=false; window.removeEventListener('mousemove',this.onMarqMove); window.removeEventListener('mouseup',this.onMarqUp); this.setState({marquee:null}); };
 
   /* ---------- drag selection to a new place ---------- */
-  beginDrag(sx,sy){
+  beginDrag(sx,sy,snap,forceMoved){
     const moving = this.state.selGroup ? this.state.tiles.filter(t=>t.group===this.state.selGroup) : this.selList();
     const movable = moving.filter(t=>!t.locked);
     if(!movable.length || !this.plateEl) return;
     const u=this.CELL*this.state.zoom, r=this.plateEl.getBoundingClientRect();
     let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
     for(const t of movable){ const f=this.footprint(t); minX=Math.min(minX,t.x); minY=Math.min(minY,t.y); maxX=Math.max(maxX,t.x+f.w); maxY=Math.max(maxY,t.y+f.h); }
-    this._dragSnap=this.serializeDoc();
-    this._drag={ ids:movable.map(t=>t.id), starts:Object.fromEntries(movable.map(t=>[t.id,{x:t.x,y:t.y}])), ox:(sx-r.left)/u, oy:(sy-r.top)/u, minX, minY, maxX, maxY, moved:false };
+    this._dragSnap=snap||this.serializeDoc();
+    this._drag={ ids:movable.map(t=>t.id), starts:Object.fromEntries(movable.map(t=>[t.id,{x:t.x,y:t.y}])), ox:(sx-r.left)/u, oy:(sy-r.top)/u, minX, minY, maxX, maxY, moved:!!forceMoved };
     this.setState({dragging:true});
     window.addEventListener('mousemove', this.onDragMove);
     window.addEventListener('mouseup', this.onDragUp);
@@ -732,7 +817,7 @@ class Component extends DCLogic {
     const set=new Set(D.ids);
     this.setState({tiles:this.state.tiles.map(t=> set.has(t.id)?{...t,x:D.starts[t.id].x+dx, y:D.starts[t.id].y+dy}:t)});
   };
-  onDragUp = ()=>{ window.removeEventListener('mousemove',this.onDragMove); window.removeEventListener('mouseup',this.onDragUp); const moved=this._drag&&this._drag.moved; this._drag=null; if(moved&&this._dragSnap) this.pushHistory(this._dragSnap); this._dragSnap=null; this.setState({dragging:false}); };
+  onDragUp = ()=>{ window.removeEventListener('mousemove',this.onDragMove); window.removeEventListener('mouseup',this.onDragUp); const moved=this._drag&&this._drag.moved; const drill=this._drillTo; this._drillTo=null; this._drag=null; if(moved&&this._dragSnap) this.pushHistory(this._dragSnap); this._dragSnap=null; if(!moved&&drill){ this.setState({selGroup:null, selIds:[drill]}); } this.setState({dragging:false}); };
 
   /* ---------- on-tile rotate handle ---------- */
   onRotateDown = (e)=>{ e.stopPropagation(); const t=this.selTile(); if(!t) return; this.pushHistory(); const el=this.plateEl; const r=el.getBoundingClientRect(); const u=this.CELL*this.state.zoom; const f=this.footprint(t); const cx=r.left+(t.x+f.w/2)*u, cy=r.top+(t.y+f.h/2)*u; this._rot={id:t.id,cx,cy,start:Math.atan2(e.clientY-cy,e.clientX-cx)*180/Math.PI,startRot:t.rot,moved:false}; window.addEventListener('mousemove',this.onRotateMove); window.addEventListener('mouseup',this.onRotateUp); };
@@ -748,26 +833,71 @@ class Component extends DCLogic {
   updTile(id,patch){ this.setState({tiles:this.state.tiles.map(t=>t.id===id?{...t,...patch}:t)}); }
   mapSel(fn){ this.pushHistory(); const s=new Set(this.state.selIds); this.setState({tiles:this.state.tiles.map(t=>s.has(t.id)?{...t,...fn(t)}:t)}); }
   rotateSel = ()=>{ this.mapSel(t=>({rot:(t.rot+90)%360})); };
-  dupSel = ()=>{ const list=this.selList(); if(!list.length) return; this.pushHistory(); const n=this.state.studs; const add=list.map(t=>{ const f=this.footprint(t); return {...t,id:this.nextId(),x:Math.min(t.x+1,n-f.w),y:Math.min(t.y+1,n-f.h)}; }); this.setState({tiles:[...this.state.tiles,...add], selIds:add.map(a=>a.id), ctxOpen:false}); };
-  delSel = ()=>{ const s=new Set(this.state.selIds); if(!s.size) return; this.pushHistory(); this.setState({tiles:this.state.tiles.filter(t=>!s.has(t.id)), selIds:[], ctxOpen:false}); };
+  dupSel = ()=>{
+    const g=this.state.selGroup;
+    const list = g ? this.state.tiles.filter(t=>t.group===g) : this.selList();
+    if(!list.length) return;
+    this.pushHistory();
+    const n=this.state.studs;
+    let gc=this.state.groupCounter; const gmap={};
+    const add=list.map(t=>{ const f=this.footprint(t); let ng=t.group; if(ng!=null){ if(gmap[ng]==null){ gc+=1; gmap[ng]='g'+gc; } ng=gmap[ng]; } return {...t, id:this.nextId(), group:ng, x:Math.min(t.x+1,n-f.w), y:Math.min(t.y+1,n-f.h)}; });
+    const newGroup = g ? gmap[g] : null;
+    this.setState({tiles:[...this.state.tiles,...add], groupCounter:gc, selIds:newGroup?[]:add.map(a=>a.id), selGroup:newGroup, ctxOpen:false});
+  };
+  duplicateGroup = (g)=>{ this.setState({selGroup:g, selIds:[]}, ()=>this.dupSel()); };
+  delSel = ()=>{ const g=this.state.selGroup; if(g){ this.pushHistory(); this.setState({tiles:this.state.tiles.filter(t=>t.group!==g), groups:this.state.groups.filter(x=>x.id!==g), selGroup:null, ctxOpen:false}); return; } const s=new Set(this.state.selIds); if(!s.size) return; this.pushHistory(); this.setState({tiles:this.state.tiles.filter(t=>!s.has(t.id)), selIds:[], ctxOpen:false}); };
   swapPartSel(part){ if(this.state.selIds.length) this.mapSel(()=>({part})); this.setState({placePart:part, swapOpen:false, barPartOpen:false}); }
-  setColorSel(id){ if(this.state.selIds.length) this.mapSel(()=>({color:id})); this.setState({placeColor:id, colorPopOpen:false, barColorOpen:false}); }
+  setColorSel(id){ const g=this.state.selGroup; if(g){ this.pushHistory(); this.setState({tiles:this.state.tiles.map(t=>t.group===g?{...t,color:id}:t)}); } else if(this.state.selIds.length){ this.mapSel(()=>({color:id})); } this.setState({placeColor:id, colorPopOpen:false, barColorOpen:false}); }
+  addBrickColor = (e)=>{ const hex=e.target&&e.target.value; if(typeof hex!=='string'||hex[0]!=='#') return; const cc=(this.state.customColors||[]); const lo=hex.toLowerCase(); let next=cc; if(!cc.some(c=>(c.hex||'').toLowerCase()===lo)){ next=[...cc,{hex,name:'Custom '+(cc.length+1)}]; this.persist('brickwork.customColors',next); this.setState({customColors:next}); } this.setColorSel(hex); };
   setRotSel(deg){ if(this.state.selIds.length) this.mapSel(()=>({rot:deg})); this.setState({placeRot:deg}); }
   flipH = ()=>{ const m={0:90,90:0,180:270,270:180}; this.mapSel(t=>({rot:m[t.rot]})); };
   flipV = ()=>{ const m={0:270,90:180,180:90,270:0}; this.mapSel(t=>({rot:m[t.rot]})); };
-  moveSel(dx,dy){ const t=this.selTile(); if(!t) return; this.pushHistory(); const n=this.state.studs,f=this.footprint(t); this.updTile(t.id,{x:Math.max(0,Math.min(t.x+dx,n-f.w)), y:Math.max(0,Math.min(t.y+dy,n-f.h))}); }
+  moveSel(dx,dy){
+    const g=this.state.selGroup;
+    const list = g ? this.state.tiles.filter(t=>t.group===g) : this.selList();
+    const movable = list.filter(t=>!t.locked);
+    if(!movable.length) return;
+    const n=this.state.studs;
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    for(const t of movable){ const f=this.footprint(t); minX=Math.min(minX,t.x); minY=Math.min(minY,t.y); maxX=Math.max(maxX,t.x+f.w); maxY=Math.max(maxY,t.y+f.h); }
+    const ndx=Math.max(-minX, Math.min(dx, n-maxX));
+    const ndy=Math.max(-minY, Math.min(dy, n-maxY));
+    if(ndx===0&&ndy===0) return;
+    this.pushHistory();
+    const set=new Set(movable.map(t=>t.id));
+    this.setState({tiles:this.state.tiles.map(t=> set.has(t.id)?{...t,x:t.x+ndx,y:t.y+ndy}:t)});
+  }
   setLayerSel(g){ const t=this.selTile(); if(t){ this.pushHistory(); this.updTile(t.id,{group:g}); } }
   selectAll = ()=>{ this.setState({selIds:this.state.tiles.filter(t=>!t.hidden&&!t.locked).map(t=>t.id), selGroup:null}); };
 
   /* ---------- groups / layers ---------- */
   selType(){ if(this.state.selGroup) return 'group'; const n=this.state.selIds.length; if(n===1) return 'tile'; if(n>1) return 'multi'; return 'document'; }
   selectGroup(g){ this.setState({selGroup:g, selIds:[], ctxOpen:false}); const tiles=this.state.tiles.filter(t=>t.group===g); if(tiles.length){ const cs=[...new Set(tiles.map(t=>t.color))]; this.setState({replaceFrom:cs[0], replaceTo:cs[1]||'white'}); } }
+  toggleGroupInSelection(g){ const gt=this.state.tiles.filter(t=>t.group===g).map(t=>t.id); const cur=this.state.selGroup?this.state.tiles.filter(t=>t.group===this.state.selGroup).map(t=>t.id):this.state.selIds; const set=new Set(cur); const allIn=gt.length>0&&gt.every(id=>set.has(id)); gt.forEach(id=>allIn?set.delete(id):set.add(id)); this.setState({selIds:[...set], selGroup:null, ctxOpen:false}); }
+  toggleTileInSelection(id){ const cur=this.state.selGroup?this.state.tiles.filter(t=>t.group===this.state.selGroup).map(t=>t.id):this.state.selIds; const set=new Set(cur); set.has(id)?set.delete(id):set.add(id); this.setState({selIds:[...set], selGroup:null, ctxOpen:false}); }
   toggleExpand(id){ this.setState({expanded:{...this.state.expanded,[id]:!this.state.expanded[id]}}); }
   toggleGroupVis(g){ const tiles=this.state.tiles; const anyVis=tiles.some(t=>t.group===g&&!t.hidden); this.setState({tiles:tiles.map(t=>t.group===g?{...t,hidden:anyVis}:t)}); }
   toggleGroupLock(g){ const tiles=this.state.tiles; const anyUn=tiles.some(t=>t.group===g&&!t.locked); this.setState({tiles:tiles.map(t=>t.group===g?{...t,locked:anyUn}:t)}); }
   groupSel = ()=>{ const ids=this.state.selIds; if(ids.length<1) return; this.pushHistory(); const num=this.state.groupCounter+1; const id='g'+num; const set=new Set(ids); this.setState({ tiles:this.state.tiles.map(t=>set.has(t.id)?{...t,group:id}:t), groups:[...this.state.groups,{id,name:'Group '+num}], groupCounter:num, selGroup:id, selIds:[], ctxOpen:false }); };
   ungroupSel = ()=>{ const g=this.state.selGroup; if(!g) return; this.pushHistory(); this.setState({tiles:this.state.tiles.map(t=>t.group===g?{...t,group:null}:t), groups:this.state.groups.filter(x=>x.id!==g), selGroup:null}); };
-  rotateGroup = ()=>{ const g=this.state.selGroup; if(!g) return; this.pushHistory(); const n=this.state.studs; this.setState({tiles:this.state.tiles.map(t=> t.group===g?{...t,x:n-1-t.y,y:t.x,rot:(t.rot+90)%360}:t)}); };
+  rotateGroup = ()=>{
+    const g=this.state.selGroup; if(!g) return;
+    const gt=this.state.tiles.filter(t=>t.group===g); if(!gt.length) return;
+    this.pushHistory();
+    const n=this.state.studs;
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    for(const t of gt){ const f=this.footprint(t); minX=Math.min(minX,t.x); minY=Math.min(minY,t.y); maxX=Math.max(maxX,t.x+f.w); maxY=Math.max(maxY,t.y+f.h); }
+    const H=maxY-minY;
+    // 90° clockwise about the group bbox; new bbox is H wide × W tall, anchored at (minX,minY)
+    let placed=gt.map(t=>{ const f=this.footprint(t); const relX=t.x-minX, relY=t.y-minY; const nrot=(t.rot+90)%360; return {...t, rot:nrot, x:minX+(H-relY-f.h), y:minY+relX}; });
+    // clamp the rotated group back onto the plate
+    let nminX=Infinity,nminY=Infinity,nmaxX=-Infinity,nmaxY=-Infinity;
+    for(const t of placed){ const f=this.footprint(t); nminX=Math.min(nminX,t.x); nminY=Math.min(nminY,t.y); nmaxX=Math.max(nmaxX,t.x+f.w); nmaxY=Math.max(nmaxY,t.y+f.h); }
+    let sx=0,sy=0; if(nminX<0) sx=-nminX; else if(nmaxX>n) sx=n-nmaxX; if(nminY<0) sy=-nminY; else if(nmaxY>n) sy=n-nmaxY;
+    if(sx||sy) placed=placed.map(t=>({...t, x:t.x+sx, y:t.y+sy}));
+    const moved=new Map(placed.map(t=>[t.id,t]));
+    this.setState({tiles:this.state.tiles.map(t=> moved.get(t.id)||t)});
+  };
   applyReplace = ()=>{ const g=this.state.selGroup; if(!g) return; this.pushHistory(); const {replaceFrom,replaceTo}=this.state; this.setState({tiles:this.state.tiles.map(t=> (t.group===g&&t.color===replaceFrom)?{...t,color:replaceTo}:t)}); };
 
   /* ---------- chrome ---------- */
@@ -834,6 +964,8 @@ class Component extends DCLogic {
     if((e.metaKey||e.ctrlKey)&&(e.key==='d'||e.key==='D')){ e.preventDefault(); this.dupSel(); return; }
     if((e.metaKey||e.ctrlKey)&&(e.key==='z'||e.key==='Z')){ e.preventDefault(); e.shiftKey?this.redo():this.undo(); return; }
     if((e.metaKey||e.ctrlKey)&&(e.key==='y'||e.key==='Y')){ e.preventDefault(); this.redo(); return; }
+    const arrows={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]};
+    if(arrows[e.key] && (this.state.selIds.length||this.state.selGroup)){ e.preventDefault(); const [dx,dy]=arrows[e.key]; const step=e.shiftKey?5:1; this.moveSel(dx*step,dy*step); return; }
     if(e.key==='v'||e.key==='V') this.pickSelect();
     else if(e.key==='p'||e.key==='P') this.pickPlace();
     else if(e.key==='e'||e.key==='E') this.pickEraser();
@@ -871,14 +1003,14 @@ class Component extends DCLogic {
     rows.push({id:'tiles',rowStyle:baseRow(false,false),indentStyle:indent(0),hasChildren:true,noCaret:false,glyphFolder:true,glyphPlate:false,glyphChip:false,name:'Tiles',nameStyle:{flex:1,fontSize:'12.5px',fontWeight:600,color:'#181D27'},showCount:st.tiles.length>0,count:st.tiles.length,showActions:false,hidden:false,visible:true,locked:false,unlocked:true,onSelect:()=>this.toggleExpand('tiles'),toggleEye:noop,toggleLock:noop,toggleExpand:(e)=>{noop(e);this.toggleExpand('tiles');},caretStyle:{transform:st.expanded.tiles?'rotate(90deg)':'rotate(0deg)',transition:'transform .12s'}});
     if(st.expanded.tiles){
       for(const g of st.groups){
-        const gt=st.tiles.filter(t=>t.group===g.id); const active=st.selGroup===g.id; const contains=sel&&sel.group===g.id;
+        const gt=st.tiles.filter(t=>t.group===g.id); const selectedAll=!st.selGroup&&gt.length>0&&gt.every(t=>selSet.has(t.id)); const active=st.selGroup===g.id||selectedAll; const contains=sel&&sel.group===g.id;
         const anyVis=gt.some(t=>!t.hidden); const anyLock=gt.length>0&&gt.every(t=>t.locked); const dom=gt[0]?this.colorHex(gt[0].color):'#ccc';
-        rows.push({id:g.id,rowStyle:baseRow(active,contains),indentStyle:indent(1),hasChildren:true,noCaret:false,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'15px',height:'15px',borderRadius:'4px',flex:'none',background:dom,boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:g.name,nameStyle:nameStyle(active,false),showCount:true,count:gt.length,showActions:true,hidden:!anyVis,visible:anyVis,locked:anyLock,unlocked:!anyLock,onSelect:()=>this.selectGroup(g.id),toggleEye:(e)=>{noop(e);this.toggleGroupVis(g.id);},toggleLock:(e)=>{noop(e);this.toggleGroupLock(g.id);},toggleExpand:(e)=>{noop(e);this.toggleExpand(g.id);},caretStyle:{transform:st.expanded[g.id]?'rotate(90deg)':'rotate(0deg)',transition:'transform .12s'}});
+        rows.push({id:g.id,rowStyle:baseRow(active,contains),indentStyle:indent(1),hasChildren:true,noCaret:false,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'15px',height:'15px',borderRadius:'4px',flex:'none',background:dom,boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:g.name,nameStyle:nameStyle(active,false),showCount:true,count:gt.length,showActions:true,hidden:!anyVis,visible:anyVis,locked:anyLock,unlocked:!anyLock,onSelect:(e)=>{ if(e&&e.shiftKey){ this.toggleGroupInSelection(g.id); } else { this.selectGroup(g.id); } },toggleEye:(e)=>{noop(e);this.toggleGroupVis(g.id);},toggleLock:(e)=>{noop(e);this.toggleGroupLock(g.id);},toggleExpand:(e)=>{noop(e);this.toggleExpand(g.id);},groupActions:true,onRotate:(e)=>{noop(e);this.setState({selGroup:g.id,selIds:[]},()=>this.rotateGroup());},onDuplicate:(e)=>{noop(e);this.duplicateGroup(g.id);},caretStyle:{transform:st.expanded[g.id]?'rotate(90deg)':'rotate(0deg)',transition:'transform .12s'}});
         if(st.expanded[g.id]) for(const t of gt.slice(0,8)){ const a=selSet.has(t.id); const p=this.PARTS[t.part];
-          rows.push({id:t.id,rowStyle:baseRow(a,false),indentStyle:indent(2),hasChildren:false,noCaret:true,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'14px',height:'14px',flex:'none',background:this.colorHex(t.color),...(p.shape==='round'?{borderRadius:'50%'}:p.shape==='quarter'?{clipPath:'circle(99% at 100% 100%)',borderRadius:'3px'}:{borderRadius:'3px'}),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:p.label,nameStyle:{flex:1,fontSize:'12px',fontWeight:a?600:400,color:a?'#0B4FBF':'#717680'},showCount:false,count:'',showActions:true,hidden:t.hidden,visible:!t.hidden,locked:t.locked,unlocked:!t.locked,onSelect:()=>this.setState({selIds:[t.id],selGroup:null,ctxOpen:false}),toggleEye:(e)=>{noop(e);this.updTile(t.id,{hidden:!t.hidden});},toggleLock:(e)=>{noop(e);this.updTile(t.id,{locked:!t.locked});},toggleExpand:noop,caretStyle:{}}); }
+          rows.push({id:t.id,rowStyle:baseRow(a,false),indentStyle:indent(2),hasChildren:false,noCaret:true,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'14px',height:'14px',flex:'none',background:this.colorHex(t.color),...(p.shape==='round'?{borderRadius:'50%'}:p.shape==='quarter'?{clipPath:'circle(99% at 100% 100%)',borderRadius:'3px'}:{borderRadius:'3px'}),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:p.label,nameStyle:{flex:1,fontSize:'12px',fontWeight:a?600:400,color:a?'#0B4FBF':'#717680'},showCount:false,count:'',showActions:true,hidden:t.hidden,visible:!t.hidden,locked:t.locked,unlocked:!t.locked,onSelect:(e)=>{ if(e&&e.shiftKey){ this.toggleTileInSelection(t.id); } else { this.setState({selIds:[t.id],selGroup:null,ctxOpen:false}); } },toggleEye:(e)=>{noop(e);this.updTile(t.id,{hidden:!t.hidden});},toggleLock:(e)=>{noop(e);this.updTile(t.id,{locked:!t.locked});},toggleExpand:noop,caretStyle:{}}); }
       }
       for(const t of st.tiles.filter(t=>!t.group)){ const a=selSet.has(t.id); const p=this.PARTS[t.part];
-        rows.push({id:t.id,rowStyle:baseRow(a,false),indentStyle:indent(1),hasChildren:false,noCaret:true,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'14px',height:'14px',flex:'none',background:this.colorHex(t.color),...(p.shape==='round'?{borderRadius:'50%'}:p.shape==='quarter'?{clipPath:'circle(99% at 100% 100%)',borderRadius:'3px'}:{borderRadius:'3px'}),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:p.label,nameStyle:{flex:1,fontSize:'12px',fontWeight:a?600:400,color:a?'#0B4FBF':'#717680'},showCount:false,count:'',showActions:true,hidden:t.hidden,visible:!t.hidden,locked:t.locked,unlocked:!t.locked,onSelect:()=>this.setState({selIds:[t.id],selGroup:null,ctxOpen:false}),toggleEye:(e)=>{noop(e);this.updTile(t.id,{hidden:!t.hidden});},toggleLock:(e)=>{noop(e);this.updTile(t.id,{locked:!t.locked});},toggleExpand:noop,caretStyle:{}}); }
+        rows.push({id:t.id,rowStyle:baseRow(a,false),indentStyle:indent(1),hasChildren:false,noCaret:true,glyphFolder:false,glyphPlate:false,glyphChip:true,chipStyle:{width:'14px',height:'14px',flex:'none',background:this.colorHex(t.color),...(p.shape==='round'?{borderRadius:'50%'}:p.shape==='quarter'?{clipPath:'circle(99% at 100% 100%)',borderRadius:'3px'}:{borderRadius:'3px'}),boxShadow:'inset 0 0 0 1px rgba(0,0,0,.08)'},name:p.label,nameStyle:{flex:1,fontSize:'12px',fontWeight:a?600:400,color:a?'#0B4FBF':'#717680'},showCount:false,count:'',showActions:true,hidden:t.hidden,visible:!t.hidden,locked:t.locked,unlocked:!t.locked,onSelect:(e)=>{ if(e&&e.shiftKey){ this.toggleTileInSelection(t.id); } else { this.setState({selIds:[t.id],selGroup:null,ctxOpen:false}); } },toggleEye:(e)=>{noop(e);this.updTile(t.id,{hidden:!t.hidden});},toggleLock:(e)=>{noop(e);this.updTile(t.id,{locked:!t.locked});},toggleExpand:noop,caretStyle:{}}); }
     }
     return rows;
   }
@@ -902,8 +1034,22 @@ class Component extends DCLogic {
     let toolbarStyle={}, tbColorDot={}, tbPartGlyph={}, selPartShort='';
     if(showSel){ const gap=showHandles?32:0; const above=by0>92; const cx=(bx0+bx1)/2; toolbarStyle={position:'absolute',left:cx+'px', top: above?(by0-10-gap)+'px':(by1+10+gap)+'px', transform: above?'translate(-50%,-100%)':'translate(-50%,0)', display:'flex',alignItems:'center',gap:'2px',background:'#23262C',borderRadius:'11px',padding:'4px',boxShadow:'0 10px 28px rgba(0,0,0,.34)',zIndex:40,pointerEvents:'auto'}; tbColorDot={width:'18px',height:'18px',borderRadius:'50%',background:head?this.colorHex(head.color):'#888',boxShadow:'inset 0 0 0 1.5px rgba(255,255,255,.25)'}; if(head){ const sp=this.PARTS[head.part]; tbPartGlyph=this.miniShape(sp.shape,15,'#C9CDD6'); selPartShort=sp.label; } }
 
-    // marquee
-    const m=st.marquee; const showMarquee=!!m;
+    // group selection: outline + floating toolbar on canvas
+    let showGroupSel=false, groupBoxStyle={}, groupToolbarStyle={};
+    if(st.selGroup){
+      const gt=st.tiles.filter(t=>t.group===st.selGroup && !t.hidden);
+      if(gt.length){
+        let gx0=Infinity,gy0=Infinity,gx1=-Infinity,gy1=-Infinity;
+        for(const t of gt){ const f=this.footprint(t); gx0=Math.min(gx0,t.x*u); gy0=Math.min(gy0,t.y*u); gx1=Math.max(gx1,(t.x+f.w)*u); gy1=Math.max(gy1,(t.y+f.h)*u); }
+        showGroupSel=true;
+        groupBoxStyle={position:'absolute',left:(gx0-4)+'px',top:(gy0-4)+'px',width:(gx1-gx0+8)+'px',height:(gy1-gy0+8)+'px',border:`1.5px dashed ${SEL}`,borderRadius:'6px',boxShadow:`0 0 0 4px ${SEL}1A`,pointerEvents:'none',zIndex:29};
+        const above=gy0>52; const gcx=(gx0+gx1)/2;
+        groupToolbarStyle={position:'absolute',left:gcx+'px', top: above?(gy0-12)+'px':(gy1+12)+'px', transform: above?'translate(-50%,-100%)':'translate(-50%,0)', display:'flex',alignItems:'center',gap:'2px',background:'#23262C',borderRadius:'11px',padding:'4px',boxShadow:'0 10px 28px rgba(0,0,0,.34)',zIndex:40,pointerEvents:'auto'};
+      }
+    }
+
+    const m = st.marquee;
+    const showMarquee = !!m;
     const marqueeStyle = m ? {position:'absolute',left:Math.min(m.x0,m.x1)+'px',top:Math.min(m.y0,m.y1)+'px',width:Math.abs(m.x1-m.x0)+'px',height:Math.abs(m.y1-m.y0)+'px',background:`${SEL}18`,border:`1px solid ${SEL}`,borderRadius:'2px',pointerEvents:'none',zIndex:35} : {};
 
     // context menu
@@ -915,9 +1061,11 @@ class Component extends DCLogic {
 
     // properties — chips
     const mkSwatch=(active,onPick,name,hex,sz)=>({name,onPick:(e)=>{e&&e.stopPropagation&&e.stopPropagation();onPick();},style:{width:'100%',aspectRatio:'1',borderRadius:sz||'8px',background:hex,cursor:'pointer',boxShadow: active?`0 0 0 2px #fff,0 0 0 4px ${SEL}`:'inset 0 0 0 1px rgba(0,0,0,.1)'}});
-    const colorChips=this.COLORS.map(c=>mkSwatch(head&&head.color===c.id,()=>this.setColorSel(c.id),c.name,c.hex));
-    const swatchSel=this.COLORS.map(c=>({name:c.name,onPick:(e)=>{e.stopPropagation();this.setColorSel(c.id);},style:{width:'30px',height:'30px',borderRadius:'8px',background:c.hex,cursor:'pointer',boxShadow:(head&&head.color===c.id)?'0 0 0 2px #23262C,0 0 0 4px #fff':'inset 0 0 0 1px rgba(255,255,255,.12)'}}));
-    const barSwatches=this.COLORS.map(c=>({name:c.name,onPick:(e)=>{e.stopPropagation();this.setColorSel(c.id);},style:{width:'30px',height:'30px',borderRadius:'8px',background:c.hex,cursor:'pointer',boxShadow:(st.placeColor===c.id)?'0 0 0 2px #23262C,0 0 0 4px #fff':'inset 0 0 0 1px rgba(255,255,255,.12)'}}));
+    const brickPalette=[...this.COLORS.map(c=>({val:c.id,hex:c.hex,name:c.name})), ...(st.customColors||[]).map((c,i)=>({val:c.hex,hex:c.hex,name:c.name||('Custom '+(i+1))}))];
+    const brickActive=(c)=> head && (head.color===c.val || head.color===c.hex);
+    const colorChips=brickPalette.map(c=>mkSwatch(brickActive(c),()=>this.setColorSel(c.val),c.name,c.hex));
+    const swatchSel=brickPalette.map(c=>({name:c.name,onPick:(e)=>{e.stopPropagation();this.setColorSel(c.val);},style:{width:'30px',height:'30px',borderRadius:'8px',background:c.hex,cursor:'pointer',boxShadow:brickActive(c)?'0 0 0 2px #23262C,0 0 0 4px #fff':'inset 0 0 0 1px rgba(255,255,255,.12)'}}));
+    const barSwatches=brickPalette.map(c=>({name:c.name,onPick:(e)=>{e.stopPropagation();this.setColorSel(c.val);},style:{width:'30px',height:'30px',borderRadius:'8px',background:c.hex,cursor:'pointer',boxShadow:(st.placeColor===c.val)?'0 0 0 2px #23262C,0 0 0 4px #fff':'inset 0 0 0 1px rgba(255,255,255,.12)'}}));
     const partChips=Object.keys(this.PARTS).map(k=>{const p=this.PARTS[k]; const a=head&&head.part===k; return {label:p.label,onPick:(e)=>{e.stopPropagation();this.swapPartSel(k);},glyphStyle:this.miniShape(p.shape,18,a?'#2D7FF9':'#A4A7AE'),chipStyle:{display:'flex',alignItems:'center',gap:'7px',height:'40px',padding:'0 10px',borderRadius:'9px',border:`1px solid ${a?'#2D7FF9':'#E9EAEB'}`,background:a?'#F6F9FF':'#fff',color:a?'#0B4FBF':'#414651',cursor:'pointer'}};});
     const swapList=Object.keys(this.PARTS).map(k=>{const p=this.PARTS[k]; const cur=head&&head.part===k; return {label:p.label,key:p.key,current:cur,onPick:(e)=>{e.stopPropagation();this.swapPartSel(k);},glyphStyle:this.miniShape(p.shape,16,'#C9CDD6'),rowStyle:{width:'100%',display:'flex',alignItems:'center',gap:'9px',height:'34px',padding:'0 8px',borderRadius:'8px',background:cur?'rgba(45,127,249,.14)':'transparent',cursor:'pointer'}};});
     const barParts=Object.keys(this.PARTS).map(k=>{const p=this.PARTS[k]; const cur=st.placePart===k; return {label:p.label,key:p.key,current:cur,onPick:(e)=>{e.stopPropagation();this.swapPartSel(k);},glyphStyle:this.miniShape(p.shape,16,'#C9CDD6'),rowStyle:{width:'100%',display:'flex',alignItems:'center',gap:'9px',height:'34px',padding:'0 8px',borderRadius:'8px',background:cur?'rgba(45,127,249,.14)':'transparent',cursor:'pointer'}};});
@@ -949,6 +1097,8 @@ class Component extends DCLogic {
     const exTab=(id,label,icon)=>({label,icon,color:st.exportTab===id?'#2D7FF9':'#717680',onPick:(e)=>{e.stopPropagation();this.setExportTab(id);},style:{display:'flex',alignItems:'center',gap:'10px',height:'40px',padding:'0 10px',borderRadius:'9px',marginBottom:'2px',fontSize:'13px',fontWeight:600,cursor:'pointer',background:st.exportTab===id?'#EAF2FF':'transparent',color:st.exportTab===id?'#0B4FBF':'#535862'}});
     const exportTabs=[ exTab('png','PNG render','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/></svg>'), exTab('bom','Parts list','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>'), exTab('build','Build guide','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16v6H4zM4 14h16v6H4z"/></svg>'), exTab('project','Project file','<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h9l5 5v11H5z"/><path d="M14 4v5h5"/></svg>') ];
     const exportPreviewStyle={width:'260px',height:'260px',borderRadius:'8px',background:this.colorHex(st.plateColor),backgroundImage:`radial-gradient(circle at 50% 46%, rgba(255,255,255,.9) 0 16%, ${this.shade(this.colorHex(st.plateColor),-0.05)} 17% 30%, rgba(0,0,0,.06) 31% 35%, transparent 36%)`,backgroundSize:`${260/st.studs}px ${260/st.studs}px`,boxShadow:'0 0 0 5px #fff,0 0 0 6px #E9EAEB,0 12px 30px -10px rgba(0,0,0,.3)'};
+    const exportPreviewSrc=(st.exportOpen && st.exportTab==='png') ? this.renderPreview({studs:st.studs, plateColor:st.plateColor, tiles:st.tiles, showStuds:st.showStuds}) : '';
+    const exportPreviewEl = exportPreviewSrc ? React.createElement('img', {src:exportPreviewSrc, alt:'Mosaic preview', style:{width:'260px',height:'260px',borderRadius:'8px',boxShadow:'0 1px 3px rgba(16,24,40,.18)'}}) : null;
 
     // prop header
     let propIconStyle={width:'20px',height:'20px',borderRadius:'5px'}, propTitle='Baseplate', propSub=st.studs+'×'+st.studs;
@@ -959,11 +1109,12 @@ class Component extends DCLogic {
 
     const emptyHintStyle={position:'absolute',left:'50%',top:'50%',transform:'translate(-50%,-50%)',display:'flex',flexDirection:'column',alignItems:'center',gap:'12px',textAlign:'center',color:'#A4A7AE',fontSize:'13px',fontWeight:500,lineHeight:1.5,pointerEvents:'none',width:'230px',zIndex:4,textWrap:'pretty'};
 
-    const projectCards=(this._projects||[]).map(p=>{ const d=p.doc||{}; const tn=(d.tiles||[]).length; if(!p.thumb) p.thumb=this.renderThumb(d); return { id:p.id, name:p.name||'Untitled mosaic', meta:(d.studs||16)+'×'+(d.studs||16)+' · '+tn+(tn===1?' tile':' tiles'), updated:'Edited '+this.relTime(p.updatedAt), thumb:p.thumb, plateBg:this.colorHex(d.plateColor), renaming:st.renamingId===p.id, notRenaming:st.renamingId!==p.id, onOpen:()=>this.openProject(p.id), onRename:(e)=>{e.stopPropagation();this.startRename(p.id,p.name);}, onDup:(e)=>{e.stopPropagation();this.duplicateProject(p.id);}, onDelete:(e)=>{e.stopPropagation();this.deleteProject(p.id);} }; });
+    const projectCards=(this._projects||[]).map(p=>{ const d=p.doc||{}; const tn=(d.tiles||[]).length; if(!p.thumb) p.thumb=this.renderThumb(d); return { id:p.id, name:p.name||'Untitled mosaic', meta:(d.studs||16)+'×'+(d.studs||16)+' · '+tn+(tn===1?' tile':' tiles'), updated:'Edited '+this.relTime(p.updatedAt), thumb:p.thumb, thumbEl:React.createElement('img',{src:p.thumb, alt:p.name||'Mosaic', style:{width:'100%',height:'100%',objectFit:'contain',display:'block',filter:'drop-shadow(0 4px 10px rgba(8,18,34,.18))'}}), plateBg:this.colorHex(d.plateColor), renaming:st.renamingId===p.id, notRenaming:st.renamingId!==p.id, onOpen:()=>this.openProject(p.id), onRename:(e)=>{e.stopPropagation();this.startRename(p.id,p.name);}, onDup:(e)=>{e.stopPropagation();this.duplicateProject(p.id);}, onDelete:(e)=>{e.stopPropagation();this.deleteProject(p.id);} }; });
 
     return {
       plateLabel:st.studs+'×'+st.studs+' studs', openExport:this.openExport,
       // gallery
+      backupAll:this.backupAll, restoreAll:this.restoreAll, backupNotice:st.backupNotice,
       inGallery:st.view==='gallery', projectCount:(this._projects||[]).length+((this._projects||[]).length===1?' project':' projects'), projectCards, createProject:this.createProject, backToGallery:this.backToGallery,
       renameVal:st.renameVal, onRenameInput:this.onRenameInput, commitRename:this.commitRename, onRenameKey:this.onRenameKey,
       // title
@@ -982,6 +1133,7 @@ class Component extends DCLogic {
       toolbarStyle, tbColorDot, tbPartGlyph, selPartShort, showSingle:list.length===1, showMultiSel:list.length>1,
       toggleColorPop:this.toggleColorPop, toggleSwap:this.toggleSwap, colorPopOpen:st.colorPopOpen, swapOpen:st.swapOpen, swatchSel, swapList,
       rotateSel:this.rotateSel, dupSel:this.dupSel, delSel:this.delSel,
+      showGroupSel, groupBoxStyle, groupToolbarStyle,
       ctxOpen:st.ctxOpen, ctxStyle, ctxItems,
       // bottom bar
       btnSelect:this.toolBtn(st.tool==='select'), btnPlace:this.toolBtn(st.tool==='place'), btnEraser:this.toolBtn(st.tool==='eraser'),
@@ -992,7 +1144,7 @@ class Component extends DCLogic {
       // properties
       isTileSel:selType==='tile', isMultiSel:selType==='multi', isGroupSel:selType==='group', isDocSel:selType==='document',
       propIconStyle, propTitle, propSub,
-      partChips, colorChips, rotChips, layerPick,
+      partChips, colorChips, rotChips, layerPick, addBrickColor:this.addBrickColor,
       flipH:this.flipH, flipV:this.flipV,
       selX:sel?sel.x:0, selY:sel?sel.y:0, incX:()=>this.moveSel(1,0), decX:()=>this.moveSel(-1,0), incY:()=>this.moveSel(0,1), decY:()=>this.moveSel(0,-1),
       multiCount:st.selIds.length, multiColors:[...new Set(list.map(t=>t.color))].length,
@@ -1008,7 +1160,8 @@ class Component extends DCLogic {
       exportOpen:st.exportOpen, closeExport:this.closeExport, exportTabs, totalTiles:st.tiles.length, bomCount:bomData.length, layerCount:st.groups.length,
       tabPng:st.exportTab==='png', tabBom:st.exportTab==='bom', tabBuild:st.exportTab==='build', tabProject:st.exportTab==='project',
       hasBom:bomData.length>0, noBom:bomData.length===0,
-      exportPreviewStyle, exportRes:(st.studs*64)+'×'+(st.studs*64)+'px', doExportPNG:this.doExportPNG, doExportCSV:this.doExportCSV, doExportJSON:this.doExportJSON, newDoc:this.newDoc, openProjectFile:this.openProjectFile,
+      exportPreviewStyle, exportPreviewSrc, exportPreviewEl, exportRes:(st.studs*64)+'×'+(st.studs*64)+'px',
+      exportFileName:(((st.projTitle||'Untitled mosaic').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''))||'mosaic')+'.brickwork', doExportPNG:this.doExportPNG, doExportCSV:this.doExportCSV, doExportJSON:this.doExportJSON, newDoc:this.newDoc, openProjectFile:this.openProjectFile,
       bomRows, buildSteps,
     };
   }
